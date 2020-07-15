@@ -5,8 +5,8 @@ import lombok.Setter;
 
 public class IndexItemRequestPayload {
 	/**
-	 * if isOwned == true -> user see their own items in shop
+	 * if owner != "" -> user see the `owner`'s items in shop
 	 * else -> user see all items in shop
 	 */
-	@Getter @Setter private Boolean isOwned;
+	@Getter @Setter private String owner;
 }

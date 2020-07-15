@@ -1,6 +1,6 @@
 CREATE TABLE if not exists items(
     id serial NOT NULL PRIMARY KEY,
-    category_id int REFERENCES categories(id),
+    category varchar(100) REFERENCES categories(name),
     owner varchar REFERENCES users(username),
     name varchar(100),
     description varchar,

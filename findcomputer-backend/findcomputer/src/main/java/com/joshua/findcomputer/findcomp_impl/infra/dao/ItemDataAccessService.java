@@ -3,6 +3,7 @@ package com.joshua.findcomputer.findcomp_impl.infra.dao;
 import com.joshua.findcomputer.findcomp_api.infra.dao.ItemDAO;
 import com.joshua.findcomputer.findcomp_impl.helper.PostgresHelper;
 import com.joshua.findcomputer.findcomp_impl.infra.flushout.ItemDataEntity;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -27,7 +28,7 @@ public class ItemDataAccessService implements ItemDAO {
 		final String sql = PostgresHelper.insertOperation(itemDataEntity);
 		return jdbcTemplate.update(sql
 			,itemDataEntity.getId()
-			,itemDataEntity.getCategoryId()
+			,itemDataEntity.getCategory()
 			,itemDataEntity.getOwner()
 			,itemDataEntity.getName()
 			,itemDataEntity.getDescription()
@@ -36,9 +37,11 @@ public class ItemDataAccessService implements ItemDAO {
 	}
 
 	@Override
-	public List<ItemDataEntity> index() {
+	public List<ItemDataEntity> index(String owner) {
 		final String sql = PostgresHelper.selectOperation(new ItemDataEntity())
-			+ " WHERE "+ItemDataEntity.ISACTIVE+" = true";
+			+ " WHERE "+ItemDataEntity.ISACTIVE+" = true"
+			+ (!owner.equals("") ? "AND "+ItemDataEntity.OWNER+" = "+owner : "");
+
 		return jdbcTemplate.query(
 			sql, ((resultSet, i) -> {
 				ItemDataEntity dataEntity = convertResultSetToDataEntity(resultSet);

@@ -3,7 +3,7 @@ package com.joshua.findcomputer.findcomp_api.domain;
 import com.joshua.findcomputer.findcomp_api.endpoint.item.payload.index.IndexItemRequestPayload;
 import com.joshua.findcomputer.findcomp_api.endpoint.item.payload.upsert.UpsertItemRequestPayload;
 import com.joshua.findcomputer.findcomp_api.model.Item;
-import org.springframework.data.util.Pair;
+import com.joshua.findcomputer.findcomp_impl.helper.Pair;
 
 
 import java.util.List;

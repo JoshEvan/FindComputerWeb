@@ -5,6 +5,11 @@ import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 
 public class Helper {
+	public static final String
+		ITEM = "Item ",
+		SUCCESS = " SUCCESSFULLY ",
+		FAIL = " FAILED TO BE",
+		INSERTED = " INSERTED ";
 
 	public static String formatCurrency(BigDecimal amount){
 		if(amount == null) amount = BigDecimal.ZERO;

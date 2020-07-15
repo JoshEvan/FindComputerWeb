@@ -5,7 +5,7 @@ import lombok.Getter;
 import java.math.BigDecimal;
 
 public class UpsertItemRequestPayload {
-	@Getter private String name, description, category, owner;
+	@Getter private String name, description, owner, category;
 	@Getter private BigDecimal priceAmount;
 
 	public UpsertItemRequestPayload setName(String name) {
@@ -16,7 +16,7 @@ public class UpsertItemRequestPayload {
 		this.description = description;return this;
 	}
 
-	public UpsertItemRequestPayload setCategory(String category) {
+	public UpsertItemRequestPayload setCategoryId(String category) {
 		this.category = category;return this;
 	}
 

@@ -5,8 +5,13 @@ import lombok.Getter;
 import java.math.BigDecimal;
 
 public class Item {
+	@Getter private Integer id;
 	@Getter private String name, description, category, price, owner;
 	@Getter private BigDecimal priceAmount;
+
+	public Item setId(Integer id) {
+		this.id = id;return this;
+	}
 
 	public Item setName(String name) {
 		this.name = name;return this;

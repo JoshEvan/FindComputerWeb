@@ -7,7 +7,7 @@ import java.util.Optional;
 
 public interface ItemDAO {
 	Integer insert(ItemDataEntity itemDataEntity);
-	List<ItemDataEntity> index();
+	List<ItemDataEntity> index(String owner);
 	Optional<ItemDataEntity> show(String id);
 	Integer update(ItemDataEntity itemDataEntity);
 	Integer delete(String idItem);

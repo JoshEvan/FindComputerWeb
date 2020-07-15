@@ -5,8 +5,8 @@ import lombok.Getter;
 import java.math.BigDecimal;
 
 public class ItemDataEntity extends FindcompDataEntity{
-	@Getter private Integer id, categoryId;
-	@Getter private String name, description, owner;
+	@Getter private Integer id;
+	@Getter private String name, description, owner, category;
 	@Getter private BigDecimal price;
 
 	public static String
@@ -14,7 +14,7 @@ public class ItemDataEntity extends FindcompDataEntity{
 		NAME ="name",
 		DES ="description",
 		PRICE = "price",
-		CAT_ID = "category_id",
+		CAT = "category",
 		OWNER = "owner"
 	;
 
@@ -31,8 +31,8 @@ public class ItemDataEntity extends FindcompDataEntity{
 		this.description = description;return this;
 	}
 
-	public ItemDataEntity setCategoryId(Integer categoryId) {
-		this.categoryId = categoryId;return this;
+	public ItemDataEntity setCategory(String category) {
+		this.category = category;return this;
 	}
 
 	public ItemDataEntity setOwner(String owner) {
