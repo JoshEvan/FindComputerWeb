@@ -1,4 +1,4 @@
-CREATE TABLE if not exists items(
+CREATE TABLE if not exists transactions(
     id serial NOT NULL PRIMARY KEY,
     item_id int REFERENCES items(id),
     username varchar REFERENCES users(username),
