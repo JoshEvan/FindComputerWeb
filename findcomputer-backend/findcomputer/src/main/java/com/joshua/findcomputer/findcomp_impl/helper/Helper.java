@@ -7,9 +7,11 @@ import java.text.DecimalFormatSymbols;
 public class Helper {
 	public static final String
 		ITEM = "Item ",
+		USER = "User ",
 		SUCCESS = " SUCCESSFULLY ",
 		FAIL = " FAILED TO BE",
-		INSERTED = " INSERTED ";
+		INSERTED = " INSERTED ",
+		REGISTERED = " REGISTERED ";
 
 	public static String formatCurrency(BigDecimal amount){
 		if(amount == null) amount = BigDecimal.ZERO;

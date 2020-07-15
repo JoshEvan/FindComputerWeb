@@ -1,4 +1,4 @@
-package com.joshua.findcomputer.findcomp_impl.endpoint.items;
+package com.joshua.findcomputer.findcomp_impl.endpoint.item;
 
 import com.joshua.findcomputer.findcomp_api.domain.ItemService;
 import com.joshua.findcomputer.findcomp_api.endpoint.ResponsePayload;
@@ -7,7 +7,6 @@ import com.joshua.findcomputer.findcomp_api.endpoint.item.payload.index.IndexIte
 import com.joshua.findcomputer.findcomp_api.endpoint.item.payload.index.IndexItemResponsePayload;
 import com.joshua.findcomputer.findcomp_api.endpoint.item.payload.upsert.UpsertItemRequestPayload;
 import com.joshua.findcomputer.findcomp_api.model.Item;
-import com.joshua.findcomputer.findcomp_impl.helper.HttpStatus;
 import com.joshua.findcomputer.findcomp_impl.helper.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
