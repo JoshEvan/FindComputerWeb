@@ -1,9 +1,11 @@
 package com.joshua.findcomputer.findcomp_impl.domain;
 
 import com.joshua.findcomputer.findcomp_api.domain.UserService;
-import com.joshua.findcomputer.findcomp_api.endpoint.user.payload.UserRegisterRequestPayload;
+import com.joshua.findcomputer.findcomp_api.endpoint.user.payload.UserAuthRegRequestPayload;
 import com.joshua.findcomputer.findcomp_api.infra.dao.UserDAO;
+import com.joshua.findcomputer.findcomp_api.model.User;
 import com.joshua.findcomputer.findcomp_impl.helper.Pair;
+import com.joshua.findcomputer.findcomp_impl.infra.flushout.UserDataEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,8 +18,10 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import static com.joshua.findcomputer.findcomp_impl.helper.Helper.*;
+import static com.joshua.findcomputer.findcomp_impl.infra.adapter.UserAdapter.convertDataEntitiesToModels;
 import static com.joshua.findcomputer.findcomp_impl.infra.adapter.UserAdapter.convertRegisterPayloadToDataEntity;
 
 @Component("userV1Service")
@@ -33,11 +37,11 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 	}
 
 	@Override
-	public Pair<Boolean, List<String>> register(UserRegisterRequestPayload userRegisterRequestPayload) {
-		userRegisterRequestPayload.setPassword(
-			passwordEncoder.encode(userRegisterRequestPayload.getPassword())
+	public Pair<Boolean, List<String>> register(UserAuthRegRequestPayload userAuthRegRequestPayload) {
+		userAuthRegRequestPayload.setPassword(
+			passwordEncoder.encode(userAuthRegRequestPayload.getPassword())
 		);
-		Integer stat = userDAO.register(convertRegisterPayloadToDataEntity(userRegisterRequestPayload));
+		Integer stat = userDAO.register(convertRegisterPayloadToDataEntity(userAuthRegRequestPayload));
 		return new Pair<>(
 			(stat == 1),
 			Collections.singletonList(
@@ -48,6 +52,15 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
 	@Override
 	public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
-		return null;
+		List<UserDataEntity> userDataEntities = userDAO.index();
+		List<User> users = convertDataEntitiesToModels(userDataEntities);
+
+		Optional<User> found = users
+				.stream()
+				.filter(
+					appUser -> s.equals(appUser.getUsername())
+				).findFirst();
+
+		return found.orElse(null);
 	}
 }
