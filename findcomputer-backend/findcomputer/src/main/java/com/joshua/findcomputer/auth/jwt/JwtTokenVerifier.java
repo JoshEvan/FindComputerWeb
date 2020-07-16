@@ -1,4 +1,4 @@
-package com.joshua.auth.jwt;
+package com.joshua.findcomputer.auth.jwt;
 
 import com.google.common.base.Strings;
 import io.jsonwebtoken.Claims;

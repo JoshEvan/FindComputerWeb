@@ -15,6 +15,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 import java.util.Collections;
 import java.util.List;
@@ -24,9 +25,10 @@ import static com.joshua.findcomputer.findcomp_impl.helper.Helper.*;
 import static com.joshua.findcomputer.findcomp_impl.infra.adapter.UserAdapter.convertDataEntitiesToModels;
 import static com.joshua.findcomputer.findcomp_impl.infra.adapter.UserAdapter.convertRegisterPayloadToDataEntity;
 
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @Component("userV1Service")
 @Service
-public class UserServiceImpl implements UserService, UserDetailsService {
+public class UserServiceImpl implements UserDetailsService, UserService{
 	private final UserDAO userDAO;
 
 	private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);

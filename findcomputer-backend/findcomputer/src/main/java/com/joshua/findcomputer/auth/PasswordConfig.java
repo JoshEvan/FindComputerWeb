@@ -1,4 +1,4 @@
-package com.joshua.auth;
+package com.joshua.findcomputer.auth;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

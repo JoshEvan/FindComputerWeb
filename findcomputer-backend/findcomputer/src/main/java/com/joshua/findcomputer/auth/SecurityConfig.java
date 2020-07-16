@@ -1,10 +1,12 @@
-package com.joshua.auth;
+package com.joshua.findcomputer.auth;
 
-import com.joshua.auth.jwt.JwtConfig;
-import com.joshua.auth.jwt.JwtTokenVerifier;
-import com.joshua.auth.jwt.JwtUsernamePasswordAuthFilter;
+import com.joshua.findcomputer.auth.jwt.JwtConfig;
+import com.joshua.findcomputer.auth.jwt.JwtTokenVerifier;
+import com.joshua.findcomputer.auth.jwt.JwtUsernamePasswordAuthFilter;
+import com.joshua.findcomputer.findcomp_api.model.UserRole;
 import com.joshua.findcomputer.findcomp_impl.domain.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -26,6 +28,7 @@ import java.util.Arrays;
 @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
 @Configuration
 @EnableWebSecurity
+@EnableAutoConfiguration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	private final PasswordEncoder passwordEncoder;
 	private final UserServiceImpl userService;
@@ -43,24 +46,25 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http
-//      .csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-//      .and()
-			.csrf().disable()
-			.cors().and()
-			.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) // jwt itu stateless
+			.csrf().disable();
+			http.cors().and()
+			.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 			.and()
 			.addFilter(new JwtUsernamePasswordAuthFilter(authenticationManager(), jwtConfig, secretKey))
 			.addFilterAfter(new JwtTokenVerifier(secretKey, jwtConfig),JwtUsernamePasswordAuthFilter.class)
 			.authorizeRequests()
-			.antMatchers("/","/api/v1/findcomp/user/register","/login","/css/*","/js/*")/*2 line ini antMatchers dan permitAll untuk whitelist url yg ga hrs login untuk akses*/
+			.antMatchers("/","/api/v1/findcomp/user/register","/login","/css/*","/js/*")
 			.permitAll()
+			.antMatchers("/api/**").hasRole(UserRole.SUPERUSER.name())
 			.anyRequest()
-			.authenticated();
+			.fullyAuthenticated();
 	}
 
 	@Override
 	public void configure(WebSecurity web) throws Exception {
-		web.ignoring().antMatchers("/api/v1/findcomp/user/register");
+		web.ignoring().antMatchers(
+			"/api/v1/findcomp/user/register",
+			"/api/v1/findcomp/user/login");
 	}
 
 	@Override

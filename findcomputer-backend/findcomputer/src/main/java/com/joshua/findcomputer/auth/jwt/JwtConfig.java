@@ -1,4 +1,4 @@
-package com.joshua.auth.jwt;
+package com.joshua.findcomputer.auth.jwt;
 
 
 import com.google.common.net.HttpHeaders;

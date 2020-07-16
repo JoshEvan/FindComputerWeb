@@ -1,4 +1,4 @@
-package com.joshua.auth.jwt;
+package com.joshua.findcomputer.auth.jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.joshua.findcomputer.findcomp_api.endpoint.user.payload.UserAuthRegRequestPayload;

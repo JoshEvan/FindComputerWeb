@@ -1,4 +1,4 @@
-package com.joshua.auth.jwt;
+package com.joshua.findcomputer.auth.jwt;
 
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Autowired;
