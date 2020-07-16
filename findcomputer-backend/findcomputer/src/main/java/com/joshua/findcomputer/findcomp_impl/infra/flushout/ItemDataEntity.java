@@ -3,9 +3,10 @@ package com.joshua.findcomputer.findcomp_impl.infra.flushout;
 import lombok.Getter;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
 public class ItemDataEntity extends FindcompDataEntity{
-	@Getter private Integer id;
+	@Getter private UUID id;
 	@Getter private String name, description, owner, category;
 	@Getter private BigDecimal price;
 
@@ -43,7 +44,7 @@ public class ItemDataEntity extends FindcompDataEntity{
 		this.price = price;return this;
 	}
 
-	public ItemDataEntity setId(Integer id) {
+	public ItemDataEntity setId(UUID id) {
 		this.id = id;return this;
 	}
 

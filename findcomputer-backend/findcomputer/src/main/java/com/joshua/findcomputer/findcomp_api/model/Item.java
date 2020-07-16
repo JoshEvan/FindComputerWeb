@@ -3,13 +3,14 @@ package com.joshua.findcomputer.findcomp_api.model;
 import lombok.Getter;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
 public class Item {
-	@Getter private Integer id;
+	@Getter private UUID id;
 	@Getter private String name, description, category, price, owner;
 	@Getter private BigDecimal priceAmount;
 
-	public Item setId(Integer id) {
+	public Item setId(UUID id) {
 		this.id = id;return this;
 	}
 

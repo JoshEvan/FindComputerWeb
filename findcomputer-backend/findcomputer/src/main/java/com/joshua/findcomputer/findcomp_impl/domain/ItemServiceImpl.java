@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static com.joshua.findcomputer.findcomp_impl.helper.Helper.*;
@@ -33,7 +34,9 @@ public class ItemServiceImpl implements ItemService {
 
 	@Override
 	public Pair<Boolean, List<String>> insert(UpsertItemRequestPayload upsertItemRequestPayload) {
-		Integer stat = itemDAO.insert(convertUpsertPayloadToDataEntity(upsertItemRequestPayload));
+		Integer stat = itemDAO.insert(
+			convertUpsertPayloadToDataEntity(upsertItemRequestPayload).setId(UUID.randomUUID())
+		);
 		return new Pair<>(
 			(stat == 1),
 			(stat == 1 ?

@@ -7,6 +7,7 @@ import com.joshua.findcomputer.findcomp_impl.infra.flushout.ItemDataEntity;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static com.joshua.findcomputer.findcomp_impl.infra.flushout.ItemDataEntity.*;
@@ -15,7 +16,7 @@ public class ItemAdapter {
 	public static ItemDataEntity convertResultSetToDataEntity(ResultSet resultSet){
 		try {
 			return new ItemDataEntity()
-				.setId(resultSet.getInt(ID))
+				.setId(resultSet.getObject(ID, UUID.class))
 				.setName(resultSet.getString(NAME))
 				.setDescription(resultSet.getString(DES))
 				.setPrice(resultSet.getBigDecimal(PRICE))
