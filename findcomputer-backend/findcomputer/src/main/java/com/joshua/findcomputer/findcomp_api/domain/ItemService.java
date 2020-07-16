@@ -15,4 +15,5 @@ public interface ItemService {
 	Item show(String id);
 	Pair<Boolean,List<String>> update(UpdateItemRequestPayload updateItemRequestPayload);
 	Pair<Boolean,List<String>> delete(String id, String requester);
+	Pair<Boolean,List<String>> buy(String id, String requester);
 }

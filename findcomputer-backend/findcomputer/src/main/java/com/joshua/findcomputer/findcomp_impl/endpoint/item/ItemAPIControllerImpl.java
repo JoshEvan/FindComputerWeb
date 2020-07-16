@@ -28,7 +28,7 @@ public class ItemAPIControllerImpl implements ItemAPIController {
 	}
 
 	@Override
-	public ResponsePayload insertItem(@NotNull InsertItemRequestPayload insertItemRequestPayload) {
+	public ResponsePayload insert(@NotNull InsertItemRequestPayload insertItemRequestPayload) {
 		Pair<Boolean, List<String>> res = itemService.insert(insertItemRequestPayload);
 		return new ResponsePayload()
 			.setStatus((res.getKey() ? SUCCESS : FAIL).toString())
@@ -36,7 +36,7 @@ public class ItemAPIControllerImpl implements ItemAPIController {
 	}
 
 	@Override
-	public IndexItemResponsePayload indexItem(@NotNull IndexItemRequestPayload indexItemRequestPayload) {
+	public IndexItemResponsePayload index(@NotNull IndexItemRequestPayload indexItemRequestPayload) {
 		return new IndexItemResponsePayload()
 			.setItems(itemService.index(indexItemRequestPayload));
 	}
@@ -47,7 +47,7 @@ public class ItemAPIControllerImpl implements ItemAPIController {
 	}
 
 	@Override
-	public ResponsePayload updateItem(@NotNull UpdateItemRequestPayload updateItemRequestPayload) {
+	public ResponsePayload update(@NotNull UpdateItemRequestPayload updateItemRequestPayload) {
 		Pair<Boolean, List<String>> resp = itemService.update(updateItemRequestPayload);
 		return new ResponsePayload()
 			.setMessage(resp.getVal())
@@ -55,8 +55,16 @@ public class ItemAPIControllerImpl implements ItemAPIController {
 	}
 
 	@Override
-	public ResponsePayload deleteItem(@NotNull String id, @NotNull String requester) {
+	public ResponsePayload delete(@NotNull String id, @NotNull String requester) {
 		Pair<Boolean, List<String>> resp = itemService.delete(id, requester);
+		return new ResponsePayload()
+			.setMessage(resp.getVal())
+			.setStatus(resp.getKey() ? SUCCESS.toString() : FAIL.toString());
+	}
+
+	@Override
+	public ResponsePayload buy(@NotNull String id, String requester) {
+		Pair<Boolean, List<String>> resp = itemService.buy(id, requester);
 		return new ResponsePayload()
 			.setMessage(resp.getVal())
 			.setStatus(resp.getKey() ? SUCCESS.toString() : FAIL.toString());

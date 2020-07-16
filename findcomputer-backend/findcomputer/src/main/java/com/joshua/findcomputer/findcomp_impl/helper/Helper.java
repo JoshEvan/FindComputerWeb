@@ -13,6 +13,7 @@ public class Helper {
 		INSERTED = " INSERTED ",
 		UPDATED = " UPDATED ",
 		DELETED = " DELETED ",
+		BUY = " BOUGHT ",
 		REGISTERED = " REGISTERED ",
 		NOTFOUND = " DOESN'T EXIST";
 

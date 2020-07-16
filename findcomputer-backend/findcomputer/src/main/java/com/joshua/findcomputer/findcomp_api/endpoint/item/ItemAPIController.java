@@ -19,19 +19,22 @@ import javax.validation.constraints.NotNull;
 @Component("itemAPIV1")
 public interface ItemAPIController {
 	@PostMapping("/insert")
-	public ResponsePayload insertItem(@NotNull @RequestBody InsertItemRequestPayload insertItemRequestPayload);
+	public ResponsePayload insert(@NotNull @RequestBody InsertItemRequestPayload insertItemRequestPayload);
 
 	@PostMapping(value = "/", produces = "application/json")
 	public @ResponseBody
-	IndexItemResponsePayload indexItem(@NotNull @RequestBody IndexItemRequestPayload indexItemRequestPayload);
+	IndexItemResponsePayload index(@NotNull @RequestBody IndexItemRequestPayload indexItemRequestPayload);
 
 	@GetMapping(value = "/show/{id}", produces = "application/json")
 	public @ResponseBody
 	Item showIndex(@NotNull @PathVariable("id") String id);
 
 	@PutMapping("/update")
-	public ResponsePayload updateItem(@NotNull @RequestBody UpdateItemRequestPayload updateItemRequestPayload);
+	public ResponsePayload update(@NotNull @RequestBody UpdateItemRequestPayload updateItemRequestPayload);
 
 	@DeleteMapping("/delete/{id}/{username}")
-	public ResponsePayload deleteItem(@NotNull @PathVariable("id") String id, @PathVariable("username") String requester);
+	public ResponsePayload delete(@NotNull @PathVariable("id") String id, @PathVariable("username") String requester);
+
+	@DeleteMapping("/buy/{id}/{username}")
+	public ResponsePayload buy(@NotNull @PathVariable("id") String id, @PathVariable("username") String requester);
 }

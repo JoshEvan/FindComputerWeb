@@ -121,4 +121,29 @@ public class ItemServiceImpl implements ItemService {
 		);
 	}
 
+	@Override
+	public Pair<Boolean, List<String>> buy(String id, String requester) {
+		Item item = show(id);
+		if(item == null){
+			return new Pair<>(
+				false,
+				Collections.singletonList(
+					ITEM+id+NOTFOUND)
+			);
+		}
+		if(item.getOwner().equals(requester)){
+			return new Pair<>(
+				false,
+				Collections.singletonList(
+					USER+requester+" IS NOT ALLOWED TO BUY THEIR OWN ITEM "+item.getName())
+			);
+		}
+		Integer stat = itemDAO.delete(UUID.fromString(id));
+		return new Pair<>(
+			(stat == 1),
+			Collections.singletonList(
+				ITEM+item.getName()+(stat == 1 ? SUCCESS : FAIL)+BUY)
+		);
+	}
+
 }
