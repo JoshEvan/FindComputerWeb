@@ -1,7 +1,8 @@
 package com.joshua.findcomputer.findcomp_impl.domain;
 
 import com.joshua.findcomputer.findcomp_api.domain.UserService;
-import com.joshua.findcomputer.findcomp_api.endpoint.user.payload.UserAuthRegRequestPayload;
+import com.joshua.findcomputer.findcomp_api.endpoint.user.payload.UserAuthRequestPayload;
+import com.joshua.findcomputer.findcomp_api.endpoint.user.payload.UserProfileRequestPayload;
 import com.joshua.findcomputer.findcomp_api.infra.dao.UserDAO;
 import com.joshua.findcomputer.findcomp_api.model.User;
 import com.joshua.findcomputer.findcomp_impl.helper.Pair;
@@ -39,11 +40,11 @@ public class UserServiceImpl implements UserDetailsService, UserService{
 	}
 
 	@Override
-	public Pair<Boolean, List<String>> register(UserAuthRegRequestPayload userAuthRegRequestPayload) {
-		userAuthRegRequestPayload.setPassword(
-			passwordEncoder.encode(userAuthRegRequestPayload.getPassword())
+	public Pair<Boolean, List<String>> register(UserProfileRequestPayload profileRequestPayload) {
+		profileRequestPayload.setPassword(
+			passwordEncoder.encode(profileRequestPayload.getPassword())
 		);
-		Integer stat = userDAO.register(convertRegisterPayloadToDataEntity(userAuthRegRequestPayload));
+		Integer stat = userDAO.register(convertRegisterPayloadToDataEntity(profileRequestPayload));
 		return new Pair<>(
 			(stat == 1),
 			Collections.singletonList(

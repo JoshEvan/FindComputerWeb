@@ -1,7 +1,7 @@
 package com.joshua.findcomputer.auth.jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.joshua.findcomputer.findcomp_api.endpoint.user.payload.UserAuthRegRequestPayload;
+import com.joshua.findcomputer.findcomp_api.endpoint.user.payload.UserAuthRequestPayload;
 import io.jsonwebtoken.Jwts;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -33,8 +33,8 @@ public class JwtUsernamePasswordAuthFilter extends UsernamePasswordAuthenticatio
 	@Override
 	public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
 		try {
-			UserAuthRegRequestPayload authRequest = new ObjectMapper()
-				.readValue(request.getInputStream(), UserAuthRegRequestPayload.class);
+			UserAuthRequestPayload authRequest = new ObjectMapper()
+				.readValue(request.getInputStream(), UserAuthRequestPayload.class);
 
 			Authentication authentication = new UsernamePasswordAuthenticationToken(
 				authRequest.getUsername(), // principal

@@ -1,7 +1,8 @@
 package com.joshua.findcomputer.findcomp_api.endpoint.user;
 
 import com.joshua.findcomputer.findcomp_api.endpoint.ResponsePayload;
-import com.joshua.findcomputer.findcomp_api.endpoint.user.payload.UserAuthRegRequestPayload;
+import com.joshua.findcomputer.findcomp_api.endpoint.user.payload.UserAuthRequestPayload;
+import com.joshua.findcomputer.findcomp_api.endpoint.user.payload.UserProfileRequestPayload;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
@@ -15,5 +16,9 @@ import javax.validation.constraints.NotNull;
 @Component("userPIV1")
 public interface UserAPIController {
 	@PostMapping("/register")
-	public ResponsePayload insertItem(@NotNull @RequestBody UserAuthRegRequestPayload userRegistPayload);
+	public ResponsePayload register(@NotNull @RequestBody UserProfileRequestPayload profileRequestPayload);
+
+	// TODO: think about this
+	@PutMapping("/update")
+	public ResponsePayload update(@NotNull @RequestBody UserProfileRequestPayload profileRequestPayload);
 }

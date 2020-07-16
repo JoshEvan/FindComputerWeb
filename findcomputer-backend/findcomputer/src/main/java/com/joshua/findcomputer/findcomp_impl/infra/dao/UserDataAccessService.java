@@ -30,6 +30,7 @@ public class UserDataAccessService implements UserDAO {
 		return jdbcTemplate.update(sql
 			,userDataEntity.getUsername()
 			,userDataEntity.getPassword()
+			,userDataEntity.getProfileInfo()
 		);
 	}
 

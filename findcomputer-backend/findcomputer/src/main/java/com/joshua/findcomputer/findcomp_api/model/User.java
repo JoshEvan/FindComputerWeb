@@ -1,5 +1,7 @@
 package com.joshua.findcomputer.findcomp_api.model;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -12,15 +14,18 @@ public class User implements UserDetails{private final Set<? extends GrantedAuth
 		isAccountNonLocked,
 		isCredentialNonExpired,
 		isEnabled;
+	@Getter @Setter private String profileInfo;
 
 	public User(Set<? extends GrantedAuthority> grantedAuthorities,
 	            String password,
 	            String username,
+	            String profileInfo,
 	            boolean isAccountNonExpired, boolean isAccountNonLocked,
 	            boolean isCredentialNonExpired, boolean isEnabled) {
 		this.grantedAuthorities = grantedAuthorities;
 		this.password = password;
 		this.username = username;
+		this.profileInfo = profileInfo;
 		this.isAccountNonExpired = isAccountNonExpired;
 		this.isAccountNonLocked = isAccountNonLocked;
 		this.isCredentialNonExpired = isCredentialNonExpired;

@@ -3,7 +3,8 @@ package com.joshua.findcomputer.findcomp_impl.endpoint.user;
 import com.joshua.findcomputer.findcomp_api.domain.UserService;
 import com.joshua.findcomputer.findcomp_api.endpoint.ResponsePayload;
 import com.joshua.findcomputer.findcomp_api.endpoint.user.UserAPIController;
-import com.joshua.findcomputer.findcomp_api.endpoint.user.payload.UserAuthRegRequestPayload;
+import com.joshua.findcomputer.findcomp_api.endpoint.user.payload.UserAuthRequestPayload;
+import com.joshua.findcomputer.findcomp_api.endpoint.user.payload.UserProfileRequestPayload;
 import com.joshua.findcomputer.findcomp_impl.helper.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -24,10 +25,15 @@ public class UserAPIControllerImpl implements UserAPIController {
 	}
 
 	@Override
-	public ResponsePayload insertItem(@NotNull UserAuthRegRequestPayload userRegistPayload) {
-		Pair<Boolean, List<String >> res = userService.register(userRegistPayload);
+	public ResponsePayload register(@NotNull UserProfileRequestPayload profileRequestPayload) {
+		Pair<Boolean, List<String >> res = userService.register(profileRequestPayload);
 		return new ResponsePayload()
 			.setStatus((res.getKey() ? SUCCESS : FAIL).toString())
 			.setMessage(res.getVal());
+	}
+
+	@Override
+	public ResponsePayload update(@NotNull UserProfileRequestPayload profileRequestPayload) {
+		return null;
 	}
 }

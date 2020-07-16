@@ -1,5 +1,5 @@
 CREATE TABLE if not exists items(
-    id serial NOT NULL PRIMARY KEY,
+    id uuid NOT NULL PRIMARY KEY,
     category varchar(100) REFERENCES categories(name),
     owner varchar REFERENCES users(username),
     name varchar(100),
