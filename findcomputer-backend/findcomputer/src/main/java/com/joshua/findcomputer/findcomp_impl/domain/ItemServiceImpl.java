@@ -2,11 +2,14 @@ package com.joshua.findcomputer.findcomp_impl.domain;
 
 import com.joshua.findcomputer.findcomp_api.domain.ItemService;
 import com.joshua.findcomputer.findcomp_api.endpoint.item.payload.index.IndexItemRequestPayload;
-import com.joshua.findcomputer.findcomp_api.endpoint.item.payload.upsert.UpsertItemRequestPayload;
+import com.joshua.findcomputer.findcomp_api.endpoint.item.payload.upsert.InsertItemRequestPayload;
+import com.joshua.findcomputer.findcomp_api.endpoint.item.payload.upsert.UpdateItemRequestPayload;
 import com.joshua.findcomputer.findcomp_api.infra.dao.ItemDAO;
 import com.joshua.findcomputer.findcomp_api.model.Item;
 import com.joshua.findcomputer.findcomp_impl.helper.Pair;
 import com.joshua.findcomputer.findcomp_impl.infra.flushout.ItemDataEntity;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -18,14 +21,14 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static com.joshua.findcomputer.findcomp_impl.helper.Helper.*;
-import static com.joshua.findcomputer.findcomp_impl.infra.adapter.ItemAdapter.convertDataEntitiesToModels;
-import static com.joshua.findcomputer.findcomp_impl.infra.adapter.ItemAdapter.convertUpsertPayloadToDataEntity;
+import static com.joshua.findcomputer.findcomp_impl.infra.adapter.ItemAdapter.*;
 
 @Component("itemV1Service")
 @Service
 public class ItemServiceImpl implements ItemService {
 
 	private final ItemDAO itemDAO;
+	private final Logger logger = LoggerFactory.getLogger(ItemServiceImpl.class);
 
 	@Autowired
 	public ItemServiceImpl(@Qualifier("pgItem") ItemDAO itemDAO) {
@@ -33,15 +36,15 @@ public class ItemServiceImpl implements ItemService {
 	}
 
 	@Override
-	public Pair<Boolean, List<String>> insert(UpsertItemRequestPayload upsertItemRequestPayload) {
+	public Pair<Boolean, List<String>> insert(InsertItemRequestPayload insertItemRequestPayload) {
 		Integer stat = itemDAO.insert(
-			convertUpsertPayloadToDataEntity(upsertItemRequestPayload).setId(UUID.randomUUID())
+			convertInsertPayloadToDataEntity(insertItemRequestPayload).setId(UUID.randomUUID())
 		);
 		return new Pair<>(
 			(stat == 1),
 			(stat == 1 ?
-				Collections.singletonList(ITEM+ upsertItemRequestPayload.getName()+ SUCCESS+" "+ INSERTED)
-				: Collections.singletonList(ITEM+ upsertItemRequestPayload.getName()+ FAIL+" "+ INSERTED)
+				Collections.singletonList(ITEM+ insertItemRequestPayload.getName()+ SUCCESS+" "+ INSERTED)
+				: Collections.singletonList(ITEM+ insertItemRequestPayload.getName()+ FAIL+" "+ INSERTED)
 			)
 		);
 	}
@@ -61,21 +64,61 @@ public class ItemServiceImpl implements ItemService {
 
 	@Override
 	public Item show(String id) {
-		return null;
+		ItemDataEntity dataEntity = itemDAO.show(UUID.fromString(id)).orElse(null);
+		if(dataEntity == null) return null;
+		return convertDataEntitiesToModels(Collections.singletonList(dataEntity)).get(0);
 	}
 
 	@Override
-	public Pair<Boolean, List<String>> update(UpsertItemRequestPayload upsertCustomerRequestPayload) {
-		return null;
+	public Pair<Boolean, List<String>> update(UpdateItemRequestPayload updateItemRequestPayload) {
+		Item item = show(updateItemRequestPayload.getItemId());
+		if(item == null){
+			return new Pair<>(
+				false,
+				Collections.singletonList(
+					ITEM+updateItemRequestPayload.getItemId()+NOTFOUND)
+			);
+		}
+		logger.info(item.getOwner()+" == "+updateItemRequestPayload.getRequester());
+		if(!item.getOwner().equals(updateItemRequestPayload.getRequester())){
+			logger.info(item.getOwner()+" attempt to update item of user "+updateItemRequestPayload.getRequester());
+			return new Pair<>(
+				false,
+				Collections.singletonList(
+					USER+updateItemRequestPayload.getRequester()+" IS NOT ALLOWED TO UPDATE "+updateItemRequestPayload.getName())
+			);
+		}
+		Integer stat = itemDAO.update(convertUpdatePayloadToDataEntity(updateItemRequestPayload));
+		return new Pair<>(
+			(stat == 1),
+			Collections.singletonList(
+				ITEM+ updateItemRequestPayload.getName()+(stat == 1 ? SUCCESS : FAIL)+UPDATED)
+		);
 	}
 
 	@Override
-	public Pair<Boolean, List<String>> delete(String itemCode) {
-		return null;
+	public Pair<Boolean, List<String>> delete(String id, String requester) {
+		Item item = show(id);
+		if(item == null){
+			return new Pair<>(
+			false,
+				Collections.singletonList(
+					ITEM+id+NOTFOUND)
+			);
+		}
+		if(!item.getOwner().equals(requester)){
+			return new Pair<>(
+				false,
+				Collections.singletonList(
+					USER+requester+" IS NOT ALLOWED TO DELETE "+item.getName())
+			);
+		}
+		Integer stat = itemDAO.delete(UUID.fromString(id));
+		return new Pair<>(
+			(stat == 1),
+			Collections.singletonList(
+				ITEM+id+(stat == 1 ? SUCCESS : FAIL)+DELETED)
+		);
 	}
 
-	@Override
-	public void generateReport(IndexItemRequestPayload indexItemRequestPayload) {
-
-	}
 }

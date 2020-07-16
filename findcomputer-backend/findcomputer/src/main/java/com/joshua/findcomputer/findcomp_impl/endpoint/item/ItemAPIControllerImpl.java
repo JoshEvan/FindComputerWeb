@@ -5,7 +5,8 @@ import com.joshua.findcomputer.findcomp_api.endpoint.ResponsePayload;
 import com.joshua.findcomputer.findcomp_api.endpoint.item.ItemAPIController;
 import com.joshua.findcomputer.findcomp_api.endpoint.item.payload.index.IndexItemRequestPayload;
 import com.joshua.findcomputer.findcomp_api.endpoint.item.payload.index.IndexItemResponsePayload;
-import com.joshua.findcomputer.findcomp_api.endpoint.item.payload.upsert.UpsertItemRequestPayload;
+import com.joshua.findcomputer.findcomp_api.endpoint.item.payload.upsert.InsertItemRequestPayload;
+import com.joshua.findcomputer.findcomp_api.endpoint.item.payload.upsert.UpdateItemRequestPayload;
 import com.joshua.findcomputer.findcomp_api.model.Item;
 import com.joshua.findcomputer.findcomp_impl.helper.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,8 +28,8 @@ public class ItemAPIControllerImpl implements ItemAPIController {
 	}
 
 	@Override
-	public ResponsePayload insertItem(@NotNull UpsertItemRequestPayload upsertItemRequestPayload) {
-		Pair<Boolean, List<String>> res = itemService.insert(upsertItemRequestPayload);
+	public ResponsePayload insertItem(@NotNull InsertItemRequestPayload insertItemRequestPayload) {
+		Pair<Boolean, List<String>> res = itemService.insert(insertItemRequestPayload);
 		return new ResponsePayload()
 			.setStatus((res.getKey() ? SUCCESS : FAIL).toString())
 			.setMessage(res.getVal());
@@ -42,16 +43,22 @@ public class ItemAPIControllerImpl implements ItemAPIController {
 
 	@Override
 	public Item showIndex(@NotNull String id) {
-		return null;
+		return itemService.show(id);
 	}
 
 	@Override
-	public ResponsePayload updateItem(@NotNull UpsertItemRequestPayload upsertItemRequestPayload) {
-		return null;
+	public ResponsePayload updateItem(@NotNull UpdateItemRequestPayload updateItemRequestPayload) {
+		Pair<Boolean, List<String>> resp = itemService.update(updateItemRequestPayload);
+		return new ResponsePayload()
+			.setMessage(resp.getVal())
+			.setStatus(resp.getKey() ? SUCCESS.toString() : FAIL.toString());
 	}
 
 	@Override
-	public ResponsePayload deleteItem(@NotNull String id) {
-		return null;
+	public ResponsePayload deleteItem(@NotNull String id, @NotNull String requester) {
+		Pair<Boolean, List<String>> resp = itemService.delete(id, requester);
+		return new ResponsePayload()
+			.setMessage(resp.getVal())
+			.setStatus(resp.getKey() ? SUCCESS.toString() : FAIL.toString());
 	}
 }

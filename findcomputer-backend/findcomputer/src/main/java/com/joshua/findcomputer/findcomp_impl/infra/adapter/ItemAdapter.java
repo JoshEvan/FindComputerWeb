@@ -1,6 +1,7 @@
 package com.joshua.findcomputer.findcomp_impl.infra.adapter;
 
-import com.joshua.findcomputer.findcomp_api.endpoint.item.payload.upsert.UpsertItemRequestPayload;
+import com.joshua.findcomputer.findcomp_api.endpoint.item.payload.upsert.InsertItemRequestPayload;
+import com.joshua.findcomputer.findcomp_api.endpoint.item.payload.upsert.UpdateItemRequestPayload;
 import com.joshua.findcomputer.findcomp_api.model.Item;
 import com.joshua.findcomputer.findcomp_impl.infra.flushout.ItemDataEntity;
 
@@ -27,13 +28,18 @@ public class ItemAdapter {
 		}
 	}
 
-	public static ItemDataEntity convertUpsertPayloadToDataEntity(UpsertItemRequestPayload upsertItemRequestPayload){
+	public static ItemDataEntity convertInsertPayloadToDataEntity(InsertItemRequestPayload insertItemRequestPayload){
 		return new ItemDataEntity()
-			.setName(upsertItemRequestPayload.getName())
-			.setDescription(upsertItemRequestPayload.getDescription())
-			.setPrice(upsertItemRequestPayload.getPriceAmount())
-			.setCategory(upsertItemRequestPayload.getCategory())
-			.setOwner(upsertItemRequestPayload.getOwner());
+			.setName(insertItemRequestPayload.getName())
+			.setDescription(insertItemRequestPayload.getDescription())
+			.setPrice(insertItemRequestPayload.getPriceAmount())
+			.setCategory(insertItemRequestPayload.getCategory())
+			.setOwner(insertItemRequestPayload.getOwner());
+	}
+
+	public static ItemDataEntity convertUpdatePayloadToDataEntity(UpdateItemRequestPayload updateItemRequestPayload){
+		return convertInsertPayloadToDataEntity(updateItemRequestPayload)
+			.setId(UUID.fromString(updateItemRequestPayload.getItemId()));
 	}
 
 	public static List<Item> convertDataEntitiesToModels(List<ItemDataEntity> itemDataEntities){

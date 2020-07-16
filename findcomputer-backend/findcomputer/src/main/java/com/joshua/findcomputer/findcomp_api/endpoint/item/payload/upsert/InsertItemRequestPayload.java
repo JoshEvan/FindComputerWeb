@@ -4,27 +4,27 @@ import lombok.Getter;
 
 import java.math.BigDecimal;
 
-public class UpsertItemRequestPayload {
+public class InsertItemRequestPayload {
 	@Getter private String name, description, owner, category;
 	@Getter private BigDecimal priceAmount;
 
-	public UpsertItemRequestPayload setName(String name) {
+	public InsertItemRequestPayload setName(String name) {
 		this.name = name;return this;
 	}
 
-	public UpsertItemRequestPayload setDescription(String description) {
+	public InsertItemRequestPayload setDescription(String description) {
 		this.description = description;return this;
 	}
 
-	public UpsertItemRequestPayload setCategoryId(String category) {
+	public InsertItemRequestPayload setCategoryId(String category) {
 		this.category = category;return this;
 	}
 
-	public UpsertItemRequestPayload setOwner(String owner) {
+	public InsertItemRequestPayload setOwner(String owner) {
 		this.owner = owner;return this;
 	}
 
-	public UpsertItemRequestPayload setPriceAmount(BigDecimal priceAmount) {
+	public InsertItemRequestPayload setPriceAmount(BigDecimal priceAmount) {
 		this.priceAmount = priceAmount;return this;
 	}
 }

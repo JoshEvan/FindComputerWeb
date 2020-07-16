@@ -11,7 +11,10 @@ public class Helper {
 		SUCCESS = " SUCCESSFULLY ",
 		FAIL = " FAILED TO BE",
 		INSERTED = " INSERTED ",
-		REGISTERED = " REGISTERED ";
+		UPDATED = " UPDATED ",
+		DELETED = " DELETED ",
+		REGISTERED = " REGISTERED ",
+		NOTFOUND = " DOESN'T EXIST";
 
 	public static String formatCurrency(BigDecimal amount){
 		if(amount == null) amount = BigDecimal.ZERO;
