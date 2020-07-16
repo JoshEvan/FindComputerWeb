@@ -2,6 +2,7 @@ package com.joshua.findcomputer.findcomp_impl.infra.adapter;
 
 import com.joshua.findcomputer.findcomp_api.endpoint.user.payload.UserAuthRequestPayload;
 import com.joshua.findcomputer.findcomp_api.endpoint.user.payload.UserProfileRequestPayload;
+import com.joshua.findcomputer.findcomp_api.endpoint.user.payload.UserUpdateProfileRequestPayload;
 import com.joshua.findcomputer.findcomp_api.model.User;
 import com.joshua.findcomputer.findcomp_api.model.UserRole;
 import com.joshua.findcomputer.findcomp_impl.infra.flushout.UserDataEntity;
@@ -18,6 +19,13 @@ public class UserAdapter {
 		return new UserDataEntity()
 			.setUsername(profileRequestPayload.getUsername())
 			.setPassword(profileRequestPayload.getPassword())
+			.setProfileInfo(profileRequestPayload.getProfileInfo());
+	}
+
+	public static UserDataEntity convertUpdatePayloadToDataEntity(UserUpdateProfileRequestPayload profileRequestPayload){
+		return new UserDataEntity()
+			.setUsername(profileRequestPayload.getUsername())
+			.setPassword(profileRequestPayload.getNewPassword())
 			.setProfileInfo(profileRequestPayload.getProfileInfo());
 	}
 

@@ -14,6 +14,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static com.joshua.findcomputer.findcomp_impl.infra.adapter.ItemAdapter.convertResultSetToDataEntity;
+import static com.joshua.findcomputer.findcomp_impl.infra.flushout.ItemDataEntity.*;
 
 @Repository("pgItem")
 public class ItemDataAccessService implements ItemDAO {
@@ -42,9 +43,9 @@ public class ItemDataAccessService implements ItemDAO {
 	public List<ItemDataEntity> index(String owner, String category) {
 		// TODO: if there's time updgrade this for list of owners and cats
 		final String sql = PostgresHelper.selectOperation(new ItemDataEntity())
-			+ " WHERE "+ItemDataEntity.ISACTIVE+" = true"
-			+ (!owner.equals("") ? " AND "+ItemDataEntity.OWNER+" = \'"+owner+"\'" : "")
-			+ (!category.equals("") ? " AND "+ItemDataEntity.CAT+" = \'"+category+"\'" : "");
+			+ " WHERE "+ ISACTIVE+" = true"
+			+ (!owner.equals("") ? " AND "+ OWNER+" = \'"+owner+"\'" : "")
+			+ (!category.equals("") ? " AND "+ CAT+" = \'"+category+"\'" : "");
 
 		return jdbcTemplate.query(
 			sql, ((resultSet, i) -> {
@@ -56,7 +57,7 @@ public class ItemDataAccessService implements ItemDAO {
 	@Override
 	public Optional<ItemDataEntity> show(UUID id) {
 		final String sql = PostgresHelper.selectOperation(new ItemDataEntity())
-			+ " WHERE "+ItemDataEntity.ID +" = ?";
+			+ " WHERE "+ ID +" = ?";
 		try {
 			ItemDataEntity itemDataEntity = jdbcTemplate.queryForObject(sql, new Object[]{id},
 				((resultSet, i) -> {
@@ -71,15 +72,15 @@ public class ItemDataAccessService implements ItemDAO {
 	@Override
 	public Integer update(ItemDataEntity itemDataEntity) {
 		HashMap<String,Object> setter = new HashMap<>();
-		setter.put(ItemDataEntity.ID, itemDataEntity.getId());
-		setter.put(ItemDataEntity.NAME, itemDataEntity.getName());
-		setter.put(ItemDataEntity.DES, itemDataEntity.getDescription());
-		setter.put(ItemDataEntity.PRICE, itemDataEntity.getPrice());
-		setter.put(ItemDataEntity.OWNER, itemDataEntity.getOwner());
-		setter.put(ItemDataEntity.CAT, itemDataEntity.getCategory());
-		setter.put(ItemDataEntity.ISACTIVE, true);
+		setter.put(ID, itemDataEntity.getId());
+		setter.put(NAME, itemDataEntity.getName());
+		setter.put(DES, itemDataEntity.getDescription());
+		setter.put(PRICE, itemDataEntity.getPrice());
+		setter.put(OWNER, itemDataEntity.getOwner());
+		setter.put(CAT, itemDataEntity.getCategory());
+		setter.put(ISACTIVE, true);
 		final String sql = PostgresHelper.updateOperation(itemDataEntity,
-			setter,ItemDataEntity.ID+" = \'" +itemDataEntity.getId()+"\'");
+			setter, ID+" = \'" +itemDataEntity.getId()+"\'");
 		return jdbcTemplate.update(sql);
 	}
 
@@ -88,9 +89,9 @@ public class ItemDataAccessService implements ItemDAO {
 		ItemDataEntity itemDataEntity = show(idItem).orElse(null);
 		if(itemDataEntity == null) return 0;
 		HashMap<String,Object> setter = new HashMap<>();
-		setter.put(ItemDataEntity.ISACTIVE, false);
+		setter.put(ISACTIVE, false);
 		final String sql = PostgresHelper.updateOperation(itemDataEntity,
-			setter,ItemDataEntity.ID+" = \'" +idItem+"\'");
+			setter, ID+" = \'" +idItem+"\'");
 		return jdbcTemplate.update(sql);
 	}
 }

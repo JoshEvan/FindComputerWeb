@@ -9,4 +9,5 @@ import java.util.Optional;
 public interface UserDAO {
 	Integer register(UserDataEntity userDataEntity);
 	public List<UserDataEntity> index();
+	Integer update(UserDataEntity userDataEntity);
 }

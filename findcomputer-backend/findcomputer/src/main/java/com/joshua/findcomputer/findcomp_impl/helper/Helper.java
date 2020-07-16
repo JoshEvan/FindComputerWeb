@@ -15,6 +15,7 @@ public class Helper {
 		DELETED = " DELETED ",
 		BUY = " BOUGHT ",
 		REGISTERED = " REGISTERED ",
+		NOTALLOW = " IS NOT ALLOWED TO ",
 		NOTFOUND = " DOESN'T EXIST";
 
 	public static String formatCurrency(BigDecimal amount){

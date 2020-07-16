@@ -85,7 +85,7 @@ public class ItemServiceImpl implements ItemService {
 			return new Pair<>(
 				false,
 				Collections.singletonList(
-					USER+updateItemRequestPayload.getRequester()+" IS NOT ALLOWED TO UPDATE "+updateItemRequestPayload.getName())
+					USER+updateItemRequestPayload.getRequester()+NOTALLOW+"UPDATE "+updateItemRequestPayload.getName())
 			);
 		}
 		Integer stat = itemDAO.update(convertUpdatePayloadToDataEntity(updateItemRequestPayload));
@@ -110,7 +110,7 @@ public class ItemServiceImpl implements ItemService {
 			return new Pair<>(
 				false,
 				Collections.singletonList(
-					USER+requester+" IS NOT ALLOWED TO DELETE "+item.getName())
+					USER+requester+NOTALLOW+"DELETE "+item.getName())
 			);
 		}
 		Integer stat = itemDAO.delete(UUID.fromString(id));
@@ -135,7 +135,7 @@ public class ItemServiceImpl implements ItemService {
 			return new Pair<>(
 				false,
 				Collections.singletonList(
-					USER+requester+" IS NOT ALLOWED TO BUY THEIR OWN ITEM "+item.getName())
+					USER+requester+NOTALLOW+"BUY THEIR OWN ITEM "+item.getName())
 			);
 		}
 		Integer stat = itemDAO.delete(UUID.fromString(id));

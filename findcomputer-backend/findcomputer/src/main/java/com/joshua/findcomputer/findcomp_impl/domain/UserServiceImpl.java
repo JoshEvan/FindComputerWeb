@@ -3,6 +3,7 @@ package com.joshua.findcomputer.findcomp_impl.domain;
 import com.joshua.findcomputer.findcomp_api.domain.UserService;
 import com.joshua.findcomputer.findcomp_api.endpoint.user.payload.UserAuthRequestPayload;
 import com.joshua.findcomputer.findcomp_api.endpoint.user.payload.UserProfileRequestPayload;
+import com.joshua.findcomputer.findcomp_api.endpoint.user.payload.UserUpdateProfileRequestPayload;
 import com.joshua.findcomputer.findcomp_api.infra.dao.UserDAO;
 import com.joshua.findcomputer.findcomp_api.model.User;
 import com.joshua.findcomputer.findcomp_impl.helper.Pair;
@@ -23,8 +24,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.joshua.findcomputer.findcomp_impl.helper.Helper.*;
-import static com.joshua.findcomputer.findcomp_impl.infra.adapter.UserAdapter.convertDataEntitiesToModels;
-import static com.joshua.findcomputer.findcomp_impl.infra.adapter.UserAdapter.convertRegisterPayloadToDataEntity;
+import static com.joshua.findcomputer.findcomp_impl.infra.adapter.UserAdapter.*;
 
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @Component("userV1Service")
@@ -50,6 +50,44 @@ public class UserServiceImpl implements UserDetailsService, UserService{
 			Collections.singletonList(
 				USER +(stat == 1 ?  SUCCESS:FAIL)+REGISTERED
 			)
+		);
+	}
+
+	@Override
+	public Pair<Boolean, List<String>> update(UserUpdateProfileRequestPayload profileRequestPayload) {
+		User user = (User) loadUserByUsername(profileRequestPayload.getUsername());
+		if(user == null){
+			return new Pair<>(
+				false,
+				Collections.singletonList(
+					USER+profileRequestPayload.getUsername()+NOTFOUND)
+			);
+		}
+		if(!profileRequestPayload.getUsername().equals(user.getUsername())){
+			return new Pair<>(
+				false,
+				Collections.singletonList(
+					USER+profileRequestPayload.getUsername()+NOTALLOW+"UPDATE PROFILE OF "+user.getUsername())
+			);
+		}
+		if(passwordEncoder.matches(profileRequestPayload.getPassword(),user.getPassword())){
+			if(profileRequestPayload.getNewPassword().isEmpty()){
+				profileRequestPayload.setNewPassword(user.getPassword());
+			}else{
+				profileRequestPayload
+					.setNewPassword(passwordEncoder.encode(profileRequestPayload.getNewPassword()));
+			}
+			Integer stat = userDAO.update(convertUpdatePayloadToDataEntity(profileRequestPayload));
+			return new Pair<>(
+				(stat == 1),
+				Collections.singletonList(
+					USER+profileRequestPayload.getUsername()+ ((stat == 1) ? SUCCESS : FAIL) +UPDATED)
+			);
+		}
+		return new Pair<>(
+			false,
+			Collections.singletonList(
+				USER+profileRequestPayload.getUsername()+NOTALLOW+"UPDATE, CREDENTIAL DOESN'T MATCH")
 		);
 	}
 
