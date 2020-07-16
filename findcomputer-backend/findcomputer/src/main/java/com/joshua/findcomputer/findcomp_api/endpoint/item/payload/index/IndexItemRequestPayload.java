@@ -7,6 +7,9 @@ public class IndexItemRequestPayload {
 	/**
 	 * if owner != "" -> user see the `owner`'s items in shop
 	 * else -> user see all items in shop
+	 *  if category != "" -> user see the `category`'s items in shop
+	 * 	else -> user see all items in shop
 	 */
-	@Getter @Setter private String owner;
+	@Getter @Setter private String owner, category;
+
 }

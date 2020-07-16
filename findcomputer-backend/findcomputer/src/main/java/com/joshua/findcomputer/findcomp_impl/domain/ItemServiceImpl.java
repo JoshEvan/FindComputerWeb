@@ -52,7 +52,7 @@ public class ItemServiceImpl implements ItemService {
 	@Override
 	public List<Item> index(IndexItemRequestPayload indexItemRequestPayload) {
 		List<ItemDataEntity> dataEntities = itemDAO.index(
-			indexItemRequestPayload.getOwner());
+			indexItemRequestPayload.getOwner(), indexItemRequestPayload.getCategory());
 		List<Item> items = convertDataEntitiesToModels(dataEntities);
 		items.stream()
 			.map(

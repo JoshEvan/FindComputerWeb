@@ -39,15 +39,16 @@ public class ItemDataAccessService implements ItemDAO {
 	}
 
 	@Override
-	public List<ItemDataEntity> index(String owner) {
+	public List<ItemDataEntity> index(String owner, String category) {
+		// TODO: if there's time updgrade this for list of owners and cats
 		final String sql = PostgresHelper.selectOperation(new ItemDataEntity())
 			+ " WHERE "+ItemDataEntity.ISACTIVE+" = true"
-			+ (!owner.equals("") ? "AND "+ItemDataEntity.OWNER+" = "+owner : "");
+			+ (!owner.equals("") ? " AND "+ItemDataEntity.OWNER+" = \'"+owner+"\'" : "")
+			+ (!category.equals("") ? " AND "+ItemDataEntity.CAT+" = \'"+category+"\'" : "");
 
 		return jdbcTemplate.query(
 			sql, ((resultSet, i) -> {
-				ItemDataEntity dataEntity = convertResultSetToDataEntity(resultSet);
-				return dataEntity;
+				return convertResultSetToDataEntity(resultSet);
 			})
 		);
 	}

@@ -8,7 +8,7 @@ import java.util.UUID;
 
 public interface ItemDAO {
 	Integer insert(ItemDataEntity itemDataEntity);
-	List<ItemDataEntity> index(String owner);
+	List<ItemDataEntity> index(String owner, String category);
 	Optional<ItemDataEntity> show(UUID id);
 	Integer update(ItemDataEntity itemDataEntity);
 	Integer delete(UUID idItem);
