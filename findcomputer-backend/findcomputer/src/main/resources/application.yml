@@ -10,6 +10,3 @@ application:
     secretKey: 123456789012345678901234567890123456789012345678901234567890asdadadadqwqeqwe!##
     tokenPrefix: Bearer
     tokenExpirationAfterDays: 3
-
-server:
-  port: 8080
