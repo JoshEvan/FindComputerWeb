@@ -2,7 +2,6 @@ import React from 'react';
 import { Formik, Field, useField, FieldAttributes, FieldArray } from 'formik';
 import { TextField, Button, Checkbox, Radio, Select, MenuItem, TextareaAutosize, Typography, FormControl, InputLabel, Container, Grid, Paper, Snackbar } from '@material-ui/core';
 import * as yup from 'yup';
-import CSS from 'csstype';
 import { ILoginRequest } from '../data/interfaces';
 import { serviceLogin } from '../data/services';
 import jwt_decode from 'jwt-decode';
@@ -23,13 +22,6 @@ const TextFieldWValidation:any = ({placeholder,type,...props}) => {
 	)
 }
 
-const coloredBg:CSS.Properties = {
-	background: 'linear-gradient(to right, #03478c, #008033)',
-	width:'100%',
-	height:'100vh',
-	margin:'0'
-}
-
 export class LoginPage extends React.Component<any,any>{
 	
 	submitLogin = async (data: ILoginRequest)  => {
@@ -45,7 +37,7 @@ export class LoginPage extends React.Component<any,any>{
 				console.log(typeof err.response.status)
 				console.log(err.response.status === 403)
 				if(err.response.status === 403){
-					console.log("in")
+					
 					this.setState({
 						snackbar:{
 							isShown:true,
@@ -112,7 +104,6 @@ export class LoginPage extends React.Component<any,any>{
 								
 								onSubmit = {(data, { setSubmitting }) => {
 										setSubmitting(true)
-										// console.log(data);
 										console.log("SUBMITTING")
 
 										this.submitLogin(data);

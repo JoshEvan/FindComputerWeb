@@ -15,10 +15,6 @@ import { SimpleExpansionPanel } from '../components/organism/expansion_panel/Sim
 
 interface Props extends RouteComponentProps{};
 
-// history itu didapet dari props
-// kalo pake Link nya react-router ga perlu props history
-// history di pass dari Route nya react-router-dom
-
 interface IItemPage{
 	rawContent:IItem[],
 	viewConstraint:IIndexItemRequest,
