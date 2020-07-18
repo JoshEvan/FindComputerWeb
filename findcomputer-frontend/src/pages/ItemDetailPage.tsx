@@ -7,7 +7,7 @@ import Divider from '@material-ui/core/Divider';
 import Typography from '@material-ui/core/Typography';
 import FaceIcon from '@material-ui/icons/Face';
 import jwt_decode from 'jwt-decode';
-import { serviceDeleteItem } from '../data/services/ItemService';
+import { serviceDeleteItem, serviceBuyItem } from '../data/services/ItemService';
 import { IDeleteItemResponse, HTTPCallStatus } from '../data/interfaces';
 import { AlertDialog } from '../components/organism';
 
@@ -42,24 +42,30 @@ class ItemDetailPage extends React.Component<any,any> {
  deleteItem = async (key:string) =>  {
   await serviceDeleteItem(key, jwt_decode(localStorage.getItem("JWT")).sub).subscribe(	
     (res:IDeleteItemResponse) => {
-      this.props.parrentCallbackDelete(res,key)
-      
+      this.props.parrentCallbackSuccess(res,key)
     },
-      (err)=>{
-        console.log("delete item err:"+err);
-        this.setState({
-          snackbar:{
-            isShown:true,
-            severity:"error",
-            msg:err.message.split()
-          }
-        })
-      }
+    (err)=>{
+      this.props.parrentCallbackError(err)
+    }
     );
   }
 
+  buyItem = async (key:string) =>  {
+    await serviceBuyItem(key, jwt_decode(localStorage.getItem("JWT")).sub).subscribe(	
+      (res:IDeleteItemResponse) => {
+        this.props.parrentCallbackSuccess(res,key)
+      },
+      (err)=>{
+        this.props.parrentCallbackError(err)
+      });
+    }
+
   deleteConfirm =  (isYes:boolean, key:string) => {
     if(isYes) this.deleteItem(key);
+  }
+
+  buyConfirm =  (isYes:boolean, key:string) => {
+    if(isYes) this.buyItem(key);
   }
   
 
@@ -102,7 +108,18 @@ class ItemDetailPage extends React.Component<any,any> {
       <div className={classes.section3}>
         {
           localStorage.getItem("JWT") !== null && jwt_decode(localStorage.getItem("JWT")).sub !== this.props.owner
-          && <Button color="primary">BUY</Button>
+          && <AlertDialog
+            color="secondary"
+            usingAction={true}
+            parentAllowance = {true}
+            param={this.props.id}
+            buttonTitle="buy"
+            dialogTitle={"Buy item "+this.props.name}
+            dialogYes="Yes"
+            dialogNo="Cancel"
+            dialogContent="Are you sure ?"
+            parentCallback={ this.buyConfirm }
+           />
         }
         {
           localStorage.getItem("JWT") !== null && jwt_decode(localStorage.getItem("JWT")).sub === this.props.owner

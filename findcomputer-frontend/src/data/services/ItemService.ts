@@ -18,6 +18,12 @@ export const serviceDeleteItem = (id:string, username:string): Observable<any> =
     )
 }
 
+export const serviceBuyItem = (id:string, username:string): Observable<any> => {
+    return Axios.delete(
+        usingBaseUrl+FINDCOMP_URL.ITEM.BUY+id+"/"+username
+    )
+}
+
 export const serviceAddItem = (dataPayload:IUpsertItemRequest): Observable<any> => {
     return Axios.post(
         usingBaseUrl+FINDCOMP_URL.ITEM.ADD,

@@ -2,7 +2,7 @@ import Axios from 'axios-observable';
 
 Axios.defaults.headers["Authorization"] = 'Bearer '+localStorage.getItem("JWT")
 
-export { serviceIndexItem,serviceDeleteItem as serviceDeletetem, serviceEditItem, serviceDownloadPdfItem} from './ItemService';
+export { serviceIndexItem,serviceDeleteItem as serviceDeletetem, serviceEditItem, serviceBuyItem } from './ItemService';
 
 export { serviceIndexCustomer,serviceEditCustomer, serviceAddCustomer, serviceDeleteCustomer } from './CustomerService';
 

@@ -176,8 +176,7 @@ export class ItemPage extends React.Component<Props,any> {
 		);
 	}
 
-
-  snackbarDelete = (res,key) => {
+  setSuccessSnackbar = (res,key) => {
     console.log("deleting")
       if(res.data['status'] == HTTPCallStatus.Success){
         var array = [...this.state.rawContent]
@@ -188,14 +187,24 @@ export class ItemPage extends React.Component<Props,any> {
 
         this.setState({rawContent:array});
       }
-    console.log("snackbar delete")
-    this.setState({
-      snackbar:{
-        isShown:true,
-        severity: ((res.data['status'] == HTTPCallStatus.Success) ? "success" : "error"),
-        msg:res.data['message']
-      }
-    })
+      this.setState({
+        snackbar:{
+          isShown:true,
+          severity: ((res.data['status'] == HTTPCallStatus.Success) ? "success" : "error"),
+          msg:res.data['message']
+        }
+      })
+  }
+
+  setErrorSnackbar = (err) => {
+    console.log("delete item err:"+err);
+      this.setState({
+        snackbar:{
+          isShown:true,
+          severity:"error",
+          msg:err.message.split()
+        }
+      })
   }
 
 	async componentDidMount(){
@@ -248,7 +257,8 @@ export class ItemPage extends React.Component<Props,any> {
                                 name = {c.name}
                                 price = {c.price}
                                 description = {c.description}
-                                parrentCallbackDelete = {this.snackbarDelete}
+                                parrentCallbackSuccess = {this.setSuccessSnackbar}
+                                parrentCallbackError = {this.setErrorSnackbar}
                               />
                             }
                           />

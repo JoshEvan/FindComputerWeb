@@ -13,7 +13,8 @@ export const FINDCOMP_URL={
         INDEX: '/item/',
         DELETE:'/item/delete/',
         ADD:'/item/insert/',
-        EDIT:'/item/update'
+        EDIT:'/item/update',
+        BUY:'/item/buy/',
     },
     USER:{
         REGISTER:'/user/register',
