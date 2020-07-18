@@ -37,11 +37,6 @@ export function ToggleMenu() {
     localStorage.removeItem("JWT")
   }
 
-  const toLogin = () => {
-    console.log("tologin")
-    return <Redirect push to="/login"/>
-  }
-
   const handleClose = (event: React.MouseEvent<EventTarget>) => {
     if (anchorRef.current && anchorRef.current.contains(event.target as HTMLElement)) {
       return;
@@ -99,8 +94,8 @@ export function ToggleMenu() {
                   <MenuList autoFocusItem={open} id="menu-list-grow" onKeyDown={handleListKeyDown}>
                     { localStorage.getItem("JWT") !== null && <MenuItem onClick={handleClose}>Logout Account</MenuItem>}
                     { localStorage.getItem("JWT") === null && 
-                      <Link to="/login" style={{textDecoration: "none",
-                      color:'#000'}}><MenuItem>Sign in</MenuItem></Link>}
+                      <Link to="/auth" style={{textDecoration: "none",
+                      color:'#000'}}><MenuItem>Login / Register</MenuItem></Link>}
                   </MenuList>
                 </ClickAwayListener>
               </Paper>

@@ -8,6 +8,7 @@ import { serviceLogin } from '../data/services';
 import jwt_decode from 'jwt-decode';
 import { Redirect, useHistory, withRouter } from 'react-router-dom';
 import { CustomizedSnackbars } from '../components/organism';
+import { TextAreaWValidation } from '../components/molecules';
 
 const validationSchema = yup.object({
 	username: yup.string().required("Username must be filled"),
@@ -35,15 +36,7 @@ export class RegisterPage extends React.Component<any,any>{
 	submitLogin = async (data: ILoginRequest)  => {
 		await serviceLogin(data).subscribe(
 			(res) => {
-				// console.log("result of login")
-				// console.log(res)
-				// console.log(res.headers)
-				// console.log(res.headers["authorization"])
-
 				var JWTToken = res.headers["authorization"].replace('Bearer ','')
-				// var user = jwt_decode(JWTToken)
-				// console.log(user)
-
 				localStorage.setItem("JWT",JWTToken)
 				this.closeSnackbar()
 				this.setState({pass:true})
@@ -100,15 +93,9 @@ export class RegisterPage extends React.Component<any,any>{
 		}
 		
 		return (
-			<div style={coloredBg}>
-				<Container  style={{paddingTop:'15%',textAlign:'center'}}>
-					<Paper elevation={3} style={{padding:'2%'}}>
-						<Typography variant="h4" component="h2">
-								Sign in
-						</Typography>
-						<Typography variant="overline" display="block" gutterBottom>
-							Joseph	
-						</Typography>
+			<div>
+				<Container  style={{textAlign:'center'}}>
+					<Paper elevation={0} style={{padding:'2%'}}>
 						{this.state.snackbar.isShown && 
 							<span style={{width:"fit-content"}}>
 								<CustomizedSnackbars
@@ -155,8 +142,17 @@ export class RegisterPage extends React.Component<any,any>{
 													as={TextField}
 													/>
 									</div>
+
+									<div style={{padding:'2%'}}>
+									<TextAreaWValidation
+										placeholder="user profile status"
+										name="description"
+										type="input"
+										/>
+								</div>
+									
 									<Button disabled={isSubmitting} type="submit">
-											sign in
+											register
 									</Button>
 									
 							</form>

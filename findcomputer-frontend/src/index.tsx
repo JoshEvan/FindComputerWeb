@@ -8,6 +8,7 @@ import { LoginPage } from './pages/LoginPage';
 import { MuiThemeProvider, ThemeProvider, createMuiTheme } from '@material-ui/core';
 import createTypography from '@material-ui/core/styles/createTypography';
 import createPalette from '@material-ui/core/styles/createPalette';
+import { AuthPage } from './pages/AuthPage';
 
 export default function App(): JSX.Element {
     const THEME = (() => {
@@ -33,7 +34,7 @@ export default function App(): JSX.Element {
                     path = "/" exact component={Home}
                 />
                 <Route
-                    path = "/login" exact component={LoginPage}
+                    path = "/auth" exact component={AuthPage}
                 />
                 <Route
                     path = "/items" exact component={ItemPage}

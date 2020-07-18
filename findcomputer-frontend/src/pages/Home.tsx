@@ -36,18 +36,7 @@ export const Home: React.FC<Props> = ({ history,location,match }) => {
 								</div>
 							</div>
 						</div>}
-						
 					/>
-					{/* <Link to ="/about">
-						go to about
-					</Link>
-					<button
-						onClick={()=> {
-							history.push('/about')
-						}}
-					>button to about</button>
-
-					<SpecialButton/> */}
 			</div>
     )
 };
