@@ -6,6 +6,7 @@ import com.joshua.findcomputer.findcomp_api.endpoint.user.UserAPIController;
 import com.joshua.findcomputer.findcomp_api.endpoint.user.payload.UserAuthRequestPayload;
 import com.joshua.findcomputer.findcomp_api.endpoint.user.payload.UserProfileRequestPayload;
 import com.joshua.findcomputer.findcomp_api.endpoint.user.payload.UserUpdateProfileRequestPayload;
+import com.joshua.findcomputer.findcomp_api.model.User;
 import com.joshua.findcomputer.findcomp_impl.helper.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -39,5 +40,10 @@ public class UserAPIControllerImpl implements UserAPIController {
 		return new ResponsePayload()
 			.setStatus((res.getKey() ? SUCCESS : FAIL).toString())
 			.setMessage(res.getVal());
+	}
+
+	@Override
+	public User show(@NotNull String username) {
+		return userService.show(username);
 	}
 }

@@ -92,6 +92,11 @@ public class UserServiceImpl implements UserDetailsService, UserService{
 	}
 
 	@Override
+	public User show(String username) {
+		return (User) loadUserByUsername(username);
+	}
+
+	@Override
 	public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
 		List<UserDataEntity> userDataEntities = userDAO.index();
 		List<User> users = convertDataEntitiesToModels(userDataEntities);
