@@ -238,7 +238,7 @@ export class ItemPage extends React.Component<Props,any> {
               label="search"
               style={{ margin: 8 }}
               placeholder="search something"
-              helperText="Enter item name or description"
+              helperText="Enter item's name / description / owner"
               fullWidth
               margin="normal"
               InputLabelProps={{
@@ -256,7 +256,9 @@ export class ItemPage extends React.Component<Props,any> {
           {
 							this.state.rawContent.map(
 							(c:IItem, idx:number) => {
-                if((c.description.includes(this.state.searchKey) || c.name.includes(this.state.searchKey)))
+                if((c.description.includes(this.state.searchKey) 
+                || c.name.includes(this.state.searchKey) 
+                || c.owner.includes(this.state.searchKey)))
                   return(
                     <React.Fragment>
                       <Box p={1}>
