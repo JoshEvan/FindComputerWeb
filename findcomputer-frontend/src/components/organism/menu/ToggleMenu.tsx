@@ -7,7 +7,7 @@ import Popper from '@material-ui/core/Popper';
 import MenuItem from '@material-ui/core/MenuItem';
 import MenuList from '@material-ui/core/MenuList';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
-import { Typography } from '@material-ui/core';
+import { Typography, Menu } from '@material-ui/core';
 import AccountCircleSharpIcon from '@material-ui/icons/AccountCircleSharp';
 import jwt_decode from 'jwt-decode';
 import { Redirect, Link } from 'react-router-dom';
@@ -37,11 +37,28 @@ export function ToggleMenu() {
     localStorage.removeItem("JWT")
   }
 
+  
   const handleClose = (event: React.MouseEvent<EventTarget>) => {
     if (anchorRef.current && anchorRef.current.contains(event.target as HTMLElement)) {
       return;
     }
+    setOpen(false);
+    location.reload(); // refresh for read new empty localStorage of JWT
+  };
+
+  const handleCloseLogout = (event: React.MouseEvent<EventTarget>) => {
+    if (anchorRef.current && anchorRef.current.contains(event.target as HTMLElement)) {
+      return;
+    }
     logOut()
+    setOpen(false);
+    location.reload(); // refresh for read new empty localStorage of JWT
+  };
+
+  const handleCloseUpdateProfile = (event: React.MouseEvent<EventTarget>) => {
+    if (anchorRef.current && anchorRef.current.contains(event.target as HTMLElement)) {
+      return;
+    }
     setOpen(false);
     location.reload(); // refresh for read new empty localStorage of JWT
   };
@@ -77,13 +94,14 @@ export function ToggleMenu() {
                 <AccountCircleSharpIcon style={{color:"white",padding:"1%"}}/>
                 {/* {console.log(jwt_decode(localStorage.getItem("JWT")))} */}
                 
-                {localStorage.getItem("JWT") !== null && jwt_decode(localStorage.getItem("JWT")).sub}
+                {localStorage.getItem("JWT") !== null && "Hello,"+jwt_decode(localStorage.getItem("JWT")).sub}
                 {localStorage.getItem("JWT") === null && "please sign in"}
                  
             </span>
 
         </Button>
-        <Popper open={open} anchorEl={anchorRef.current} role={undefined} transition disablePortal style={{width:'fit-content'}}>
+        <Popper open={open} anchorEl={anchorRef.current} role={undefined} transition disablePortal 
+          style={{marginRight:'2%',width:'fit-content'}}>
           {({ TransitionProps, placement }) => (
             <Grow
               {...TransitionProps}
@@ -92,11 +110,17 @@ export function ToggleMenu() {
               <Paper>
                 <ClickAwayListener onClickAway={handleClose}>
                   <MenuList autoFocusItem={open} id="menu-list-grow" onKeyDown={handleListKeyDown}>
-                    { localStorage.getItem("JWT") !== null && <MenuItem onClick={handleClose}>Logout Account</MenuItem>}
+                    { localStorage.getItem("JWT") !== null && 
+                    <React.Fragment>
+                      <MenuItem onClick={handleCloseUpdateProfile}>My Profile</MenuItem>
+                      <MenuItem onClick={handleCloseLogout}>Logout Account</MenuItem>
+                    </React.Fragment>
+                    }
                     { localStorage.getItem("JWT") === null && 
                       <Link to="/auth" style={{textDecoration: "none",
                       color:'#000'}}><MenuItem>Login / Register</MenuItem></Link>}
                   </MenuList>
+                  
                 </ClickAwayListener>
               </Paper>
             </Grow>

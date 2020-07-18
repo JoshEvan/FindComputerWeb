@@ -26,7 +26,7 @@ function Copyright() {
     <Typography variant="body2" color="textSecondary" align="center">
       {'Copyright © '}
       <Link color="inherit" href="https://material-ui.com/">
-        Your Website
+        Find Computer By JoshEvan
       </Link>{' '}
       {new Date().getFullYear()}
       {'.'}
@@ -117,7 +117,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Dashboard({titlePage, content}){
   const classes = useStyles();
-  const [open, setOpen] = React.useState(true);
+  const [open, setOpen] = React.useState(false);
   const handleDrawerOpen = () => {
     setOpen(true);
   };

@@ -1,14 +1,11 @@
 interface IItem{
- itemCode:string,
+ id:string,
  name:string,
  description:string,
+ category:string,
  price:string,
- stock:number,
- capacity:number,
- totalSold:number,
- incomeAmountDec:any,
- incomeAmount:string,
- priceDec:any
+ owner:string,
+ priceAmount:any
 }
 
 export { IItem };

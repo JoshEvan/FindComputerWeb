@@ -1,9 +1,8 @@
 import { IItem } from "./IItem";
 
 export interface IIndexItemRequest{
-    sortByItemCode:number,
-    sortByAmountIncome:number,
-    sortByAmountSold:number
+    owner:string,
+    category:string
 }
 
 export interface IIndexItemResponse{

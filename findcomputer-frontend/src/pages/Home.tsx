@@ -2,22 +2,35 @@ import React from 'react'
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { SpecialButton } from '../components/molecules/SpecialButton';
 import { Dashboard } from '../components/template/Dashboard';
-import { Typography } from '@material-ui/core';
+import CSS from 'csstype'
+import { Typography, TextField, Button, makeStyles, Theme, createStyles } from '@material-ui/core';
 
 interface Props extends RouteComponentProps{};
 
-// history itu didapet dari props
-// kalo pake Link nya react-router ga perlu props history
-// history di pass dari Route nya react-router-dom
-export const Home: React.FC<Props> = ({ history,location,match }) => {
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    margin: {
+      margin: theme.spacing(1),
+    },
+    extendedIcon: {
+      marginRight: theme.spacing(1),
+    },
+  }),
+);
+const plainLinkStyle: CSS.Properties = {
+  textDecoration: "none",
+  color:'#000'
+}
 
-	console.log(location);
-	// location.search bisa kaya buat ambil pathvariable
-	console.log(match);
+export const Home: React.FC<Props> = ({ history,location,match }) => {
+	const classes = useStyles();
+	// console.log(location);
+	// // location.search bisa kaya buat ambil pathvariable
+	// console.log(match);
 		return (
 			<div>
 					<Dashboard 
-						titlePage="Dashboard"
+						titlePage=""
 						content={
 						<div>
 							<br/>
@@ -27,12 +40,21 @@ export const Home: React.FC<Props> = ({ history,location,match }) => {
 								</div>
 								<div style={{float: 'left', width:'75%'}}>
 								<Typography variant="h3" component="h2" gutterBottom>
-									Hello, Welcome to YES
-									
+									Find Computer
 								</Typography>
 								<Typography variant="overline" display="block" gutterBottom>
-									Stock Management System
+									One Stop Solution Marketplace For Computers
 								</Typography>
+								<Link to="/items" style={plainLinkStyle}>
+									<Button size="large" color="primary" className={classes.margin} variant="contained">
+										Buy Something
+									</Button>
+								</Link>
+								<Link to="/transactions" style={plainLinkStyle}>
+									<Button size="large" color="primary" className={classes.margin} variant="outlined">
+										Sell Something
+									</Button>
+								</Link>
 								</div>
 							</div>
 						</div>}
