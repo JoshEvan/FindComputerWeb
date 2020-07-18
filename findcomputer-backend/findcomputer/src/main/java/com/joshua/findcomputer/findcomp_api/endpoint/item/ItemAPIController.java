@@ -27,7 +27,7 @@ public interface ItemAPIController {
 
 	@GetMapping(value = "/show/{id}", produces = "application/json")
 	public @ResponseBody
-	Item showIndex(@NotNull @PathVariable("id") String id);
+	Item show(@NotNull @PathVariable("id") String id);
 
 	@PutMapping("/update")
 	public ResponsePayload update(@NotNull @RequestBody UpdateItemRequestPayload updateItemRequestPayload);

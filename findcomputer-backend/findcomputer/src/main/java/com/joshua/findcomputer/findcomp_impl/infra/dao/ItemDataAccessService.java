@@ -3,7 +3,6 @@ package com.joshua.findcomputer.findcomp_impl.infra.dao;
 import com.joshua.findcomputer.findcomp_api.infra.dao.ItemDAO;
 import com.joshua.findcomputer.findcomp_impl.helper.PostgresHelper;
 import com.joshua.findcomputer.findcomp_impl.infra.flushout.ItemDataEntity;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;

@@ -42,7 +42,7 @@ public class ItemAPIControllerImpl implements ItemAPIController {
 	}
 
 	@Override
-	public Item showIndex(@NotNull String id) {
+	public Item show(@NotNull String id) {
 		return itemService.show(id);
 	}
 
