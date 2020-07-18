@@ -16,6 +16,9 @@ export const FINDCOMP_URL={
         EDIT:'/item/update',
         BUY:'/item/buy/',
     },
+    CAT:{
+        INDEX:'/category/index'
+    },
     USER:{
         REGISTER:'/user/register',
         UPDATE:'/user/update'

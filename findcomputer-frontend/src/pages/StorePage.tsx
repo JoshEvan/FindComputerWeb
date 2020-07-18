@@ -2,7 +2,7 @@ import React from 'react'
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Dashboard } from '../components/template/Dashboard';
 import { CustomTable, AlertDialog, CustomizedSnackbars, OutlinedCard } from '../components/organism';
-import { IItem, IIndexItemRequest, IDeleteItemResponse, HTTPCallStatus, IUpsertItemRequest, IUpsertItemResponse} from '../data/interfaces';
+import { IItem, IIndexItemRequest, HTTPCallStatus, IInsertItemRequest, IUpsertItemResponse, ICategory, IUpdateItemRequest} from '../data/interfaces';
 import { serviceIndexItem, getCurrentDate } from '../data/services';
 import "regenerator-runtime/runtime.js";
 import { Button, Paper, Card, CardContent, Typography, Box, TextField } from '@material-ui/core';
@@ -11,6 +11,8 @@ import { serviceDeleteItem, serviceAddItem, serviceEditItem } from '../data/serv
 import { ItemForm } from '../components/organism/form';
 import ItemDetailPage from './ItemDetailPage';
 import jwt_decode from 'jwt-decode';
+import { ResponsiveDialog } from '../components/organism/dialog';
+import { serviceIndexCategory } from '../data/services/CategoryService';
 
 interface Props extends RouteComponentProps{};
 
@@ -22,22 +24,28 @@ interface IStorePage{
 		isShown:boolean,
 		severity:string,
 		msg:[]
-	},
+  },
+  addDialog:{
+    isShown:boolean,
+    title:string,
+    dialogNo:string,
+    dialogYes:string,
+    usingAction:boolean
+  },
+  categories:ICategory[]
 	editDialog:{
 		isShown:boolean
 	}
 }
 
-const colName: string[] = ["NUM","ITEM CODE", "NAME", 
-"DESCRIPTION", "PRICE", "STOCK", "CAPACITY","TOTAL SOLD", "GENERATED INCOME","ACTION"]
-
 const initItem={
-	itemCode:'',
+	id:'',
 	name:'',
 	description:'',
-	price:0,
-	stock:0,
-	capacity:0,
+  price:'',
+  category:'',
+	owner:'',
+	priceDec:0.0,
 }
 
 const getInitViewConstraint = () => ({
@@ -47,7 +55,7 @@ const getInitViewConstraint = () => ({
 
 
 export class StorePage extends React.Component<Props,any> {
-	
+	_isMounted:boolean=false;
 	state:IStorePage;
 	constructor(props:Props){
 		super(props);
@@ -55,7 +63,15 @@ export class StorePage extends React.Component<Props,any> {
 			rawContent:[],
       viewConstraint:getInitViewConstraint(),
       searchKey:"",
-			snackbar:{
+      addDialog:{
+        isShown:false,
+        title:"Sell new item",
+				dialogNo:"cancel",
+        dialogYes:"yes",
+        usingAction:true
+      },
+      categories:[],
+			snackbar:{  
 				isShown:false,
 				severity:"info",
 				msg:[]
@@ -76,12 +92,13 @@ export class StorePage extends React.Component<Props,any> {
 		});
 	}
 
-	addItem = async (data:IUpsertItemRequest) => {
+	addItem = async (data:IInsertItemRequest) => {
+    data  = data as IInsertItemRequest
+    data.owner = jwt_decode(localStorage.getItem("JWT")).sub
+    // console.log(data)
 		await serviceAddItem(data).subscribe(
 			(res:IUpsertItemResponse) => {
 				if(res.data['status'] == HTTPCallStatus.Success){
-					// TODO: set viewConstraint to default ?
-					
 					this.loadAllItems()
 				}
 				this.setState({
@@ -89,20 +106,18 @@ export class StorePage extends React.Component<Props,any> {
 						isShown:true,
 						severity: ((res.data['status'] == HTTPCallStatus.Success) ? "success" : "error"),
 						msg:res.data['message']
-					}
+          },
+          addDialog:{
+            isShown:false
+          }
 				})
 			},
 			(err)=>{
 				console.log("add item err:"+err);
-				this.setState({
-					snackbar:{
-						isShown:true,
-						severity:"error",
-						msg:err.message.split()
-					}
-				})
+				this.setErrorSnackbar(err)
 			}
-		)
+    )
+    
 		this.setState({
 			addDialog:{
 				isShown:false,
@@ -116,7 +131,7 @@ export class StorePage extends React.Component<Props,any> {
 		})
 	}
 
-	editItem = async (data:IUpsertItemRequest) => {
+	editItem = async (data:IUpdateItemRequest) => {
 		await serviceEditItem(data).subscribe(
 			(res:IUpsertItemResponse) => {
 				if(res.data['status'] == HTTPCallStatus.Success){
@@ -156,8 +171,6 @@ export class StorePage extends React.Component<Props,any> {
 				this.setState({
 					rawContent: res.data["items"]
 				});
-				console.log(this.state.rawContent[0].itemCode);
-				console.log("STATE:"+Object.keys(this.state.rawContent).length);
 			},
 			(err)=>{
 				console.log("axios err:"+err);
@@ -170,7 +183,25 @@ export class StorePage extends React.Component<Props,any> {
 				})
 			}
 		);
+  }
+  
+  loadAllCategories = async () => {
+		console.log("posting index cate request")
+		await serviceIndexCategory().subscribe(
+			(res) => {
+				console.log("RES:"+Object.keys(res).length);
+				console.log(res.data["categories"]);
+				this.setState({
+					categories: res.data["categories"]
+				});
+			},
+			(err)=>{
+				console.log("axios err:"+err);
+				this.setErrorSnackbar(err)
+			}
+		);
 	}
+
 
   setSuccessSnackbar = (res,key) => {
     console.log("deleting")
@@ -193,7 +224,6 @@ export class StorePage extends React.Component<Props,any> {
   }
 
   setErrorSnackbar = (err) => {
-    console.log("delete item err:"+err);
       this.setState({
         snackbar:{
           isShown:true,
@@ -210,9 +240,16 @@ export class StorePage extends React.Component<Props,any> {
   }
 
 	async componentDidMount(){
+    this._isMounted = true;			
+    if(this._isMounted){
+      this.loadAllCategories()
+    }
 		this.loadAllItems();
-	}
-
+  }
+  componentWillUnmount(){
+    this._isMounted=false;
+  }
+  
 	render(){
 		return (
 			<Dashboard 
@@ -250,6 +287,28 @@ export class StorePage extends React.Component<Props,any> {
 
             </Box>
           </Box>
+          <AlertDialog
+              variant="contained"
+              buttonSize = "large"
+              color="primary"
+              size="large"
+              parentAllowance = {this.state.addDialog.isShown}
+              buttonTitle="Sell New Item"
+              parentCallbackOpen={()=>this.setState({addDialog:{isShown:true}})}
+              dialogTitle="Sell New Item"
+              usingAction={false}
+              dialogContent={
+                <ItemForm
+                  submitData = {this.addItem}
+                  item={
+                    {}
+                  }
+                  categories={
+                    this.state.categories
+                  }
+                />
+              }
+          />
           <Box display="flex" flexWrap="wrap">
           {
 							this.state.rawContent.map(

@@ -30,18 +30,6 @@ interface IItemPage{
 	}
 }
 
-const colName: string[] = ["NUM","ITEM CODE", "NAME", 
-"DESCRIPTION", "PRICE", "STOCK", "CAPACITY","TOTAL SOLD", "GENERATED INCOME","ACTION"]
-
-const initItem={
-	itemCode:'',
-	name:'',
-	description:'',
-	price:0,
-	stock:0,
-	capacity:0,
-}
-
 const getInitViewConstraint = () => ({
   owner:"",
   category:""

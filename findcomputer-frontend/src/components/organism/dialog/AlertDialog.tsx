@@ -22,7 +22,7 @@ export function AlertDialog(props:any) {
 
 	return (
 		<div>
-				<Button variant="outlined" color={props.color} onClick={handleClickOpen}>
+				<Button size={props.buttonSize} variant={props.variant} color={props.color} onClick={handleClickOpen}>
 					{props.buttonTitle}
 				</Button>
 				<Dialog
