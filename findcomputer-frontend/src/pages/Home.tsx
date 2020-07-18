@@ -50,7 +50,7 @@ export const Home: React.FC<Props> = ({ history,location,match }) => {
 										Buy Something
 									</Button>
 								</Link>
-								<Link to="/transactions" style={plainLinkStyle}>
+								<Link to="/store" style={plainLinkStyle}>
 									<Button size="large" color="primary" className={classes.margin} variant="outlined">
 										Sell Something
 									</Button>

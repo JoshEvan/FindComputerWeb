@@ -9,6 +9,7 @@ import { MuiThemeProvider, ThemeProvider, createMuiTheme } from '@material-ui/co
 import createTypography from '@material-ui/core/styles/createTypography';
 import createPalette from '@material-ui/core/styles/createPalette';
 import { AuthPage } from './pages/AuthPage';
+import { StorePage } from './pages/StorePage';
 
 export default function App(): JSX.Element {
     const THEME = (() => {
@@ -40,7 +41,7 @@ export default function App(): JSX.Element {
                     path = "/items" exact component={ItemPage}
                 />
                 <Route
-                    path="/transactions" exact component={TransactionPage}
+                    path="/store" exact component={StorePage}
                 />
                 <Route
                     path = "/" component={() => <div>404 - page not found</div>}
