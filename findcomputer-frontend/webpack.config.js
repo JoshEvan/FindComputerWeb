@@ -21,7 +21,7 @@ module.exports = {
         // untuk kasih tau tempat exported, compiled code nya kemana, ke folder build di root dir
         path: path.resolve(__dirname,'build'),
         filename:"bundle.js", // nama file di index.html
-        publicPath: '/'
+        publicPath: '/build/'
     },
     module: {rules}, // {rules} sama kaya {rules:rules}
     // resolve extension file wktu import
@@ -32,3 +32,5 @@ module.exports = {
         historyApiFallback: true
     }
 }
+
+console.log(__dirname)

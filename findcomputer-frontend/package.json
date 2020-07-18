@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "set NODE_ENV=production&& node server.js",
+    "start": "webpack-dev-server --env.dev --open --hot --progress --colors --inline --config webpack.config.js",
     "dev": "webpack && webpack-dev-server --open",
-    "build-development": "webpack",
+    "build-development": "webpack -p --progress",
     "build": "webpack -p --define process.env.NODE_ENV='\"production\"' --progress --colors"
   },
   "keywords": [],
@@ -43,6 +43,6 @@
     "babel-plugin-transform-class-properties": "^6.24.1",
     "bootstrap": "^4.4.1",
     "react-router-dom": "^5.1.2",
-    "webpack-dev-server": "^3.10.3"
+    "webpack-dev-server": "^3.11.0"
   }
 }

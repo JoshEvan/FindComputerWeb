@@ -27,7 +27,8 @@ export const Home: React.FC<Props> = ({ history,location,match }) => {
 								</div>
 								<div style={{float: 'left', width:'75%'}}>
 								<Typography variant="h3" component="h2" gutterBottom>
-									Hello, Welcome to Joseph
+									Hello, Welcome to YES
+									
 								</Typography>
 								<Typography variant="overline" display="block" gutterBottom>
 									Stock Management System
