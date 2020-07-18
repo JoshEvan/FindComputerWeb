@@ -5,7 +5,7 @@ import { CustomTable, AlertDialog, CustomizedSnackbars, OutlinedCard } from '../
 import { IItem, IIndexItemRequest, IDeleteItemResponse, HTTPCallStatus, IUpsertItemRequest, IUpsertItemResponse} from '../data/interfaces';
 import { serviceIndexItem, getCurrentDate } from '../data/services';
 import "regenerator-runtime/runtime.js";
-import { Button, Paper, Card, CardContent, Typography, Box } from '@material-ui/core';
+import { Button, Paper, Card, CardContent, Typography, Box, TextField } from '@material-ui/core';
 import { async } from 'rxjs/internal/scheduler/async';
 import { serviceDeleteItem, serviceAddItem, serviceEditItem } from '../data/services/ItemService';
 import { ItemForm } from '../components/organism/form';
@@ -18,7 +18,8 @@ interface Props extends RouteComponentProps{};
 
 interface IItemPage{
 	rawContent:IItem[],
-	viewConstraint:IIndexItemRequest,
+  viewConstraint:IIndexItemRequest,
+  searchKey:string,
 	snackbar:{
 		isShown:boolean,
 		severity:string,
@@ -54,7 +55,8 @@ export class ItemPage extends React.Component<Props,any> {
 		super(props);
 		this.state = {
 			rawContent:[],
-			viewConstraint:getInitViewConstraint(),
+      viewConstraint:getInitViewConstraint(),
+      searchKey:"",
 			snackbar:{
 				isShown:false,
 				severity:"info",
@@ -74,10 +76,6 @@ export class ItemPage extends React.Component<Props,any> {
 				msg:[]
 			}
 		});
-	}
-	
-	deleteConfirm = (isYes:boolean, key:string) => {
-		if(isYes) this.deleteItem(key);
 	}
 
 	addItem = async (data:IUpsertItemRequest) => {
@@ -207,6 +205,12 @@ export class ItemPage extends React.Component<Props,any> {
       })
   }
 
+  search = (e) => {
+    this.setState({
+      searchKey:e.target.value
+    }, console.log(this.state.searchKey))
+  }
+
 	async componentDidMount(){
 		this.loadAllItems();
 	}
@@ -228,52 +232,73 @@ export class ItemPage extends React.Component<Props,any> {
 						}
 					</div>
           <Box display="flex" flexWrap="wrap">
+            <Box p={1}>
+            <TextField
+              id="outlined-full-width"
+              label="search"
+              style={{ margin: 8 }}
+              placeholder="search something"
+              helperText="Enter item name or description"
+              fullWidth
+              margin="normal"
+              InputLabelProps={{
+                shrink: true,
+              }}
+              variant="outlined"
+              onChange={this.search}
+            />
+            </Box>
+            <Box p ={1}>
+
+            </Box>
+          </Box>
+          <Box display="flex" flexWrap="wrap">
           {
 							this.state.rawContent.map(
 							(c:IItem, idx:number) => {
-								// console.log("TOTABLE:"+c.itemCode)
-								return(
-									<React.Fragment>
-                    <Box p={1}>
-                      <OutlinedCard
-                          category={c.category}
-                          owner = {c.owner}
-                          name = {c.name}
-                          price = {c.price}
-                          actions={
-                            <AlertDialog
-                            color="primary"
-                            param={c.id}
-                            parentAllowance = {this.state.editDialog.isShown}
-                            buttonTitle="show more"
-                            parentCallbackOpen={()=>this.setState({editDialog:{isShown:true}})}
-                            dialogTitle="Item Details"
-                            usingAction={false}
-                            dialogContent={
-                              <ItemDetailPage
-                                id={c.id}
-                                category={c.category}
-                                owner = {c.owner}
-                                name = {c.name}
-                                price = {c.price}
-                                description = {c.description}
-                                parrentCallbackSuccess = {this.setSuccessSnackbar}
-                                parrentCallbackError = {this.setErrorSnackbar}
-                              />
+                if((c.description.includes(this.state.searchKey) || c.name.includes(this.state.searchKey)))
+                  return(
+                    <React.Fragment>
+                      <Box p={1}>
+                        <OutlinedCard
+                            category={c.category}
+                            owner = {c.owner}
+                            name = {c.name}
+                            price = {c.price}
+                            actions={
+                              <AlertDialog
+                              color="primary"
+                              param={c.id}
+                              parentAllowance = {this.state.editDialog.isShown}
+                              buttonTitle="show more"
+                              parentCallbackOpen={()=>this.setState({editDialog:{isShown:true}})}
+                              dialogTitle="Item Details"
+                              usingAction={false}
+                              dialogContent={
+                                <ItemDetailPage
+                                  id={c.id}
+                                  category={c.category}
+                                  owner = {c.owner}
+                                  name = {c.name}
+                                  price = {c.price}
+                                  description = {c.description}
+                                  parrentCallbackSuccess = {this.setSuccessSnackbar}
+                                  parrentCallbackError = {this.setErrorSnackbar}
+                                />
+                              }
+                            />
                             }
                           />
-                          }
-                        />
-                      </Box>
-									</React.Fragment>
-								);
-							}
-						)   
-          }
-          </Box>
-        </div>
-			}/>
-		)
+                        </Box>
+                    </React.Fragment>
+                  );
+                }
+              )
+            }
+            </Box>
+          </div>
+        }/>
+      )
 	}
 };
 
