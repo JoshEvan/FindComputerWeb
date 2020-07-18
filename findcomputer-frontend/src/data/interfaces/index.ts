@@ -18,4 +18,4 @@ export { ITransaction, ITransactionDetail, /*initTransaction,*/ initTransactionD
 export { IIndexTransactionRequest, getInitIndexTransactionRequest } from './transactions/IIndexTransaction'
 export { IUpsertTransactionRequest,IUpsertTransactionDetailRequest } from './transactions/IUpsertTransaction'
 
-export { ILoginRequest } from './ILogin';
+export { ILoginRequest, IRegisterRequest, convIRegisterRequestToILoginRequest } from './IAuth';

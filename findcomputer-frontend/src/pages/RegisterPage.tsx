@@ -3,8 +3,8 @@ import { Formik, Field, useField, FieldAttributes, FieldArray } from 'formik';
 import { TextField, Button, Checkbox, Radio, Select, MenuItem, TextareaAutosize, Typography, FormControl, InputLabel, Container, Grid, Paper, Snackbar } from '@material-ui/core';
 import * as yup from 'yup';
 import CSS from 'csstype';
-import { ILoginRequest } from '../data/interfaces';
-import { serviceLogin } from '../data/services';
+import { ILoginRequest, IRegisterRequest, HTTPCallStatus, convIRegisterRequestToILoginRequest } from '../data/interfaces';
+import { serviceLogin, serviceRegister } from '../data/services';
 import jwt_decode from 'jwt-decode';
 import { Redirect, useHistory, withRouter } from 'react-router-dom';
 import { CustomizedSnackbars } from '../components/organism';
@@ -32,10 +32,37 @@ const coloredBg:CSS.Properties = {
 }
 
 export class RegisterPage extends React.Component<any,any>{
-	
 	submitLogin = async (data: ILoginRequest)  => {
 		await serviceLogin(data).subscribe(
 			(res) => {
+				var JWTToken = res.headers["authorization"].replace('Bearer ','')
+				localStorage.setItem("JWT",JWTToken)
+				this.closeSnackbar()
+				this.setState({pass:true})
+				location.reload() // preventing error pass state true when log out then log in back without refresh page
+			},
+			(err) => {
+				if(err.response.status === 403){
+					this.setState({
+						snackbar:{
+							isShown:true,
+							msg:("invalid username and password").split(),
+							severity:"error"
+						}
+					})
+					console.log(this.state.snackbar.isShown)
+				}
+			}
+		)
+	}
+
+	submitRegister = async (data: IRegisterRequest)  => {
+		await serviceRegister(data).subscribe(
+			(res) => {
+				if(res.data['status'] == HTTPCallStatus.Success){
+					// signing in user
+					this.submitLogin(convIRegisterRequestToILoginRequest(data))
+				}
 				var JWTToken = res.headers["authorization"].replace('Bearer ','')
 				localStorage.setItem("JWT",JWTToken)
 				this.closeSnackbar()
@@ -108,7 +135,8 @@ export class RegisterPage extends React.Component<any,any>{
 							<Formik
 								initialValues={{
 										username:'',
-										password: ''
+										password: '',
+										profileInfo:''
 								}}
 								
 								onSubmit = {(data, { setSubmitting }) => {
@@ -116,7 +144,7 @@ export class RegisterPage extends React.Component<any,any>{
 										// console.log(data);
 										console.log("SUBMITTING")
 
-										this.submitLogin(data);
+										this.submitRegister(data);
 										
 										setSubmitting(false);
 										console.log("done submit add data")
@@ -146,7 +174,7 @@ export class RegisterPage extends React.Component<any,any>{
 									<div style={{padding:'2%'}}>
 									<TextAreaWValidation
 										placeholder="user profile status"
-										name="description"
+										name="profileInfo"
 										type="input"
 										/>
 								</div>

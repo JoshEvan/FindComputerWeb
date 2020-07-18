@@ -8,7 +8,7 @@ const API_URL = {
     }
 }
 
-export const JOSEPH_URL={
+export const FINDCOMP_URL={
     ITEM: {
         INDEX: '/item/',
         DELETE:'/item/delete/',
@@ -16,8 +16,8 @@ export const JOSEPH_URL={
         EDIT:'/item/update'
     },
     USER:{
-        REGISTER:'/register',
-        UPDATE:'/update'
+        REGISTER:'/user/register',
+        UPDATE:'/user/update'
     }
 }
 

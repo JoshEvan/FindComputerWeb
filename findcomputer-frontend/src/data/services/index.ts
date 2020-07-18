@@ -12,7 +12,7 @@ export { serviceIndexPaymentType, serviceAddPayType, serviceDeletePayType, servi
 
 export { serviceIndexTransaction, serviceDeleteTransaction, serviceAddTransaction, serviceEditTransaction, serviceDownloadPdfTransaction } from './TransaactionService';
 
-export { serviceLogin } from './AuthService';
+export { serviceLogin, serviceRegister } from './AuthService';
 
 export function getCurrentDate(separator=''){
     let currDate = new Date()
