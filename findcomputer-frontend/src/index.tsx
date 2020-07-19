@@ -14,7 +14,7 @@ import { red } from '@material-ui/core/colors';
 export default function App(): JSX.Element {
     const THEME = (() => {
         const palette = createPalette({
-          type: 'dark',
+          type: 'light',
           primary: {
             main: '#039be5',
           },

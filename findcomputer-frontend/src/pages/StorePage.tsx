@@ -1,5 +1,5 @@
 import React from 'react'
-import { RouteComponentProps } from 'react-router-dom';
+import { RouteComponentProps, Redirect } from 'react-router-dom';
 import { Dashboard } from '../components/template/Dashboard';
 import { AlertDialog, CustomizedSnackbars, OutlinedCard } from '../components/organism';
 import { IItem, IIndexItemRequest, HTTPCallStatus, IInsertItemRequest, IUpsertItemResponse, ICategory, IUpdateItemRequest} from '../data/interfaces';
@@ -256,12 +256,21 @@ export class StorePage extends React.Component<Props,any> {
       this.loadAllCategories()
     }
 		this.loadAllItems();
-  }
+	}
+	
   componentWillUnmount(){
     this._isMounted=false;
   }
   
 	render(){
+
+		if(!localStorage.getItem("JWT")){
+			alert("Hello! I am an alert box!!");
+			return(
+				<Redirect to="/"/>
+			)
+		}
+
     let searchKeyword: string = this.state.searchKey
 		let selectedCategory : string = this.state.category
 		const filteredItems = this.state.rawContent.filter(
