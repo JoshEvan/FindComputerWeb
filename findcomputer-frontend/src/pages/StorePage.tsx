@@ -1,18 +1,17 @@
 import React from 'react'
-import { Link, RouteComponentProps } from 'react-router-dom';
+import { RouteComponentProps } from 'react-router-dom';
 import { Dashboard } from '../components/template/Dashboard';
-import { CustomTable, AlertDialog, CustomizedSnackbars, OutlinedCard } from '../components/organism';
+import { AlertDialog, CustomizedSnackbars, OutlinedCard } from '../components/organism';
 import { IItem, IIndexItemRequest, HTTPCallStatus, IInsertItemRequest, IUpsertItemResponse, ICategory, IUpdateItemRequest} from '../data/interfaces';
-import { serviceIndexItem, getCurrentDate } from '../data/services';
+import { serviceIndexItem } from '../data/services';
 import "regenerator-runtime/runtime.js";
-import { Button, Paper, Card, CardContent, Typography, Box, TextField } from '@material-ui/core';
-import { async } from 'rxjs/internal/scheduler/async';
-import { serviceDeleteItem, serviceAddItem, serviceEditItem } from '../data/services/ItemService';
+import { Box, TextField } from '@material-ui/core';
+import { serviceAddItem, serviceEditItem } from '../data/services/ItemService';
 import { ItemForm } from '../components/organism/form';
 import ItemDetailPage from './ItemDetailPage';
 import jwt_decode from 'jwt-decode';
-import { ResponsiveDialog } from '../components/organism/dialog';
 import { serviceIndexCategory } from '../data/services/CategoryService';
+import { FormGroup, Label, Input } from 'reactstrap';
 
 interface Props extends RouteComponentProps{};
 
@@ -20,6 +19,7 @@ interface IStorePage{
 	rawContent:IItem[],
   viewConstraint:IIndexItemRequest,
   searchKey:string,
+  category:string,
 	snackbar:{
 		isShown:boolean,
 		severity:string,
@@ -63,6 +63,7 @@ export class StorePage extends React.Component<Props,any> {
 			rawContent:[],
       viewConstraint:getInitViewConstraint(),
       searchKey:"",
+      category:"",
       addDialog:{
         isShown:false,
         title:"Sell new item",
@@ -238,7 +239,13 @@ export class StorePage extends React.Component<Props,any> {
       searchKey:e.target.value
     }, () => console.log(this.state.searchKey))
   }
-
+  searchByCategory = (e) => {
+		this.setState({
+      category:e.target.value
+		})
+		console.log(this.state.category)
+  }
+  
 	async componentDidMount(){
     this._isMounted = true;			
     if(this._isMounted){
@@ -251,6 +258,18 @@ export class StorePage extends React.Component<Props,any> {
   }
   
 	render(){
+    let searchKeyword: string = this.state.searchKey
+		let selectedCategory : string = this.state.category
+		const filteredItems = this.state.rawContent.filter(
+			item => {
+				if(searchKeyword === null) return 1;
+				if(selectedCategory.length > 0 && item.category !== null && item.category !== selectedCategory) return 0;
+				return ((item.name != null && item.name.toLowerCase().indexOf(searchKeyword.toLowerCase()) !== -1
+				|| (item.owner != null && item.owner.toLowerCase().indexOf(searchKeyword.toLowerCase()) !== -1)
+				|| (item.description != null && item.description.toLowerCase().indexOf(searchKeyword.toLowerCase()) !== -1))
+				)
+			}
+		)
 		return (
 			<Dashboard 
 			titlePage = {jwt_decode(localStorage.getItem("JWT")).sub+"\'s store"}			
@@ -284,7 +303,19 @@ export class StorePage extends React.Component<Props,any> {
             />
             </Box>
             <Box p ={1}>
-
+							<FormGroup>
+								<Label for="category">Category</Label>
+								<Input type="select" name="select" id="category" onChange={this.searchByCategory}>
+									<option></option>
+									{
+										this.state.categories.map(
+											(c:ICategory) => {
+												return (<option>{c.name}</option>)
+											}
+										)
+									}
+								</Input>
+							</FormGroup>
             </Box>
           </Box>
           <AlertDialog
@@ -311,10 +342,8 @@ export class StorePage extends React.Component<Props,any> {
           />
           <Box display="flex" flexWrap="wrap">
           {
-							this.state.rawContent.map(
-							(c:IItem, idx:number) => {
-                if((c.description.includes(this.state.searchKey) 
-                || c.name.includes(this.state.searchKey)))
+            filteredItems.map(
+							(c:IItem) => {
                   return(
                     <React.Fragment>
                       <Box p={1}>
