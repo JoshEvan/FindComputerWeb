@@ -1,7 +1,10 @@
 # FindComputerWeb
 
 *A simple Web Application for simple eCommerce, where user can buy and sell computer parts.*
-For Live Demo can be seen at here https://findcomputer-joshua.herokuapp.com/
+
+For Live Demo can be seen here https://findcomputer-joshua.herokuapp.com/
+
+For Video Demo can be seen here https://github.com/JoshEvan/FindComputerWeb/blob/master/findcomputer-demo.mp4?raw=true
 
 made using:
 1. Java Spring Boot
