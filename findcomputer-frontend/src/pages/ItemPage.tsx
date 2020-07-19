@@ -97,14 +97,7 @@ export class ItemPage extends React.Component<Props,any> {
 				console.log("STATE:"+Object.keys(this.state.rawContent).length);
 			},
 			(err)=>{
-				console.log("axios err:"+err);
-				this.setState({
-					snackbar:{
-						isShown:true,
-						severity:"error",
-						msg:err.message.split()
-					}
-				})
+				this.setErrorSnackbar(err)
 			}
 		);
 	}
@@ -148,7 +141,8 @@ export class ItemPage extends React.Component<Props,any> {
 			snackbar:{
 				isShown:true,
 				severity:"error",
-				msg:err.message.split()
+				msg:[err.message.split(),
+				(err.message.includes("403") ? "please login first": "")]
 			}
 		})
   }

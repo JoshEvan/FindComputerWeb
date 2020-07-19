@@ -11,7 +11,7 @@ import LayersIcon from '@material-ui/icons/Layers';
 import ReceiptIcon from '@material-ui/icons/Receipt';
 import LocalAtmIcon from '@material-ui/icons/LocalAtm';
 import AssignmentIcon from '@material-ui/icons/Assignment';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles'
 import CSS from 'csstype'
 
@@ -46,7 +46,12 @@ export const mainListItems = (
           <ListItemText primary="Marketplace" />
           </ListItem>
       </Link>
-      <Link to="/store" style={plainLinkStyle}>
+      <Link to="/store" style={plainLinkStyle} onClick={() => {
+        if(localStorage.getItem("JWT") === null){
+          alert("please login first")
+          return (<Redirect to ="/"/>)
+        }
+      }}>
         <ListItem button>
           <ListItemIcon>
             <LocalAtmIcon />
@@ -54,30 +59,5 @@ export const mainListItems = (
           <ListItemText primary="My Store" />
         </ListItem>
       </Link>
-      {/* <Link to="/customers" style={plainLinkStyle}>
-          <ListItem button>
-          <ListItemIcon>
-              <PeopleIcon />
-          </ListItemIcon>
-          <ListItemText primary="Customers" />
-          </ListItem>
-      </Link>
-    </div>}
-    <Link to="/productions" style={plainLinkStyle}>
-      <ListItem button>
-        <ListItemIcon>
-          <LayersIcon />
-        </ListItemIcon>
-        <ListItemText primary="Productions" />
-      </ListItem>
-    </Link>
-    <Link to="/payments" style={plainLinkStyle} >
-    <ListItem button>
-      <ListItemIcon>
-        <ReceiptIcon />
-      </ListItemIcon>
-      <ListItemText primary="Payment types" />
-    </ListItem>
-    </Link> */}
   </div>
 );

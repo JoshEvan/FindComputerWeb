@@ -33,7 +33,7 @@ export const Home: React.FC<Props> = ({ history,location,match }) => {
 							<br/>
 							<div style={{display:'table'}}>
 								<div style={{float: 'left', width:'25%'}}>
-									<img id="loading-img" style={{width:'70%', height:'auto'}} src="../assets/imgs/logo.png"/>
+									<img id="loading-img" style={{width:'70%', height:'auto'}} src="https://raw.githubusercontent.com/JoshEvan/FindComputerWeb/master/findcomputer-frontend/src/assets/imgs/logo.png"/>
 								</div>
 								<div style={{float: 'left', width:'75%'}}>
 								<Typography variant="h3" component="h2" gutterBottom>

@@ -49,7 +49,7 @@ const initItem={
 }
 
 const getInitViewConstraint = () => ({
-  owner:jwt_decode(localStorage.getItem("JWT")).sub,
+  owner:(localStorage.getItem("JWT") !== null ? jwt_decode(localStorage.getItem("JWT")).sub : ""),
   category:""
 })
 
@@ -172,7 +172,6 @@ export class StorePage extends React.Component<Props,any> {
 		);
 	}
 
-
   setSuccessSnackbar = (res,key) => {
     console.log("deleting")
       if(res.data['status'] == HTTPCallStatus.Success){
@@ -193,14 +192,15 @@ export class StorePage extends React.Component<Props,any> {
       })
   }
 
-  setErrorSnackbar = (err) => {
-      this.setState({
-        snackbar:{
-          isShown:true,
-          severity:"error",
-          msg:err.message.split()
-        }
-      })
+	setErrorSnackbar = (err) => {
+		this.setState({
+			snackbar:{
+				isShown:true,
+				severity:"error",
+				msg:[err.message.split(),
+				(err.message.includes("403") ? "please login first": "")]
+			}
+		})
   }
 
   search = (e) => {
@@ -251,7 +251,7 @@ export class StorePage extends React.Component<Props,any> {
   }
 
 	async componentDidMount(){
-    this._isMounted = true;			
+    this._isMounted = true;
     if(this._isMounted){
       this.loadAllCategories()
     }
@@ -264,11 +264,9 @@ export class StorePage extends React.Component<Props,any> {
   
 	render(){
 
-		if(!localStorage.getItem("JWT")){
-			alert("Hello! I am an alert box!!");
-			return(
-				<Redirect to="/"/>
-			)
+		if(localStorage.getItem("JWT") === null){
+			alert("please login first")
+			return (<Redirect to="/"/>)
 		}
 
     let searchKeyword: string = this.state.searchKey
