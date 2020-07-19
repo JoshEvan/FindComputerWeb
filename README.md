@@ -40,3 +40,8 @@ To run this project locally:
   * run through favorite IDE or
     * change directory to `findcomputer-backend/findcomputer/target`
     * run command `java -jar findcomputer-0.0.1-SNAPSHOT.jar`
+
+
+Entity Relationship Diagram:
+> *note: transactions and categories diagram is for later improvement*
+<img src="https://raw.githubusercontent.com/JoshEvan/FindComputerWeb/master/findcomputer-ERD.png"/>
