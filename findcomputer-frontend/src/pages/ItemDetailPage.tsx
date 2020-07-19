@@ -78,14 +78,11 @@ class ItemDetailPage extends React.Component<any,any> {
 	editItem = async (data:IUpdateItemRequest) => {
     data = data as IUpdateItemRequest
     data.requester = jwt_decode(localStorage.getItem("JWT")).sub
-		await serviceEditItem(data).subscribe(
-			(res:IUpdateItemResponse) => {
-				this.props.parrentCallbackSuccessEdit(res)
-			},
-			(err)=>{
-			  this.props.parrentCallbackError(err)
-			}
-		)
+		serviceEditItem(data).subscribe((res: IUpdateItemResponse) => {
+      this.props.parrentCallbackSuccessEdit(res);
+    }, (err) => {
+      this.props.parrentCallbackError(err);
+    })
 		this.setState({
 			editDialog:{isShown:false}
 		})

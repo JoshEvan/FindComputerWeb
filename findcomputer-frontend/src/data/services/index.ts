@@ -4,10 +4,9 @@ Axios.defaults.headers["Authorization"] = 'Bearer '+localStorage.getItem("JWT")
 
 export { serviceIndexItem,serviceDeleteItem as serviceDeletetem, serviceEditItem, serviceBuyItem } from './ItemService';
 
-
 export { serviceIndexTransaction, serviceDeleteTransaction, serviceAddTransaction, serviceEditTransaction, serviceDownloadPdfTransaction } from './TransaactionService';
 
-export { serviceLogin, serviceRegister } from './AuthService';
+export { serviceLogin, serviceRegister, serviceShowUser, serviceUpdateUser } from './AuthService';
 
 export function getCurrentDate(separator=''){
     let currDate = new Date()

@@ -3,13 +3,12 @@ import ReactDOM from 'react-dom'
 import { BrowserRouter,Route, Switch } from "react-router-dom";
 import { Home } from './pages/Home';
 import { ItemPage } from './pages/ItemPage';
-import { TransactionPage } from './pages/TransactionPage';
-import { LoginPage } from './pages/LoginPage';
-import { MuiThemeProvider, ThemeProvider, createMuiTheme } from '@material-ui/core';
+import { MuiThemeProvider, createMuiTheme } from '@material-ui/core';
 import createTypography from '@material-ui/core/styles/createTypography';
 import createPalette from '@material-ui/core/styles/createPalette';
 import { AuthPage } from './pages/AuthPage';
 import { StorePage } from './pages/StorePage';
+import { ProfilePage } from './pages/ProfilePage';
 
 export default function App(): JSX.Element {
     const THEME = (() => {
@@ -42,6 +41,9 @@ export default function App(): JSX.Element {
                 />
                 <Route
                     path="/store" exact component={StorePage}
+                />
+                <Route
+                    path="/profile" exact component={ProfilePage}
                 />
                 <Route
                     path = "/" component={() => <div>404 - page not found</div>}

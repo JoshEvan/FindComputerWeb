@@ -43,7 +43,7 @@ export function ToggleMenu() {
       return;
     }
     setOpen(false);
-    location.reload(); // refresh for read new empty localStorage of JWT
+    // location.reload(); // refresh for read new empty localStorage of JWT
   };
 
   const handleCloseLogout = (event: React.MouseEvent<EventTarget>) => {
@@ -112,7 +112,8 @@ export function ToggleMenu() {
                   <MenuList autoFocusItem={open} id="menu-list-grow" onKeyDown={handleListKeyDown}>
                     { localStorage.getItem("JWT") !== null && 
                     <React.Fragment>
-                      <MenuItem onClick={handleCloseUpdateProfile}>My Profile</MenuItem>
+                       <Link to="/profile" style={{textDecoration: "none",
+                      color:'#000'}}><MenuItem>My Profile</MenuItem></Link>
                       <MenuItem onClick={handleCloseLogout}>Logout Account</MenuItem>
                     </React.Fragment>
                     }

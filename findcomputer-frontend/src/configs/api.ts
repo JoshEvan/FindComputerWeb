@@ -21,7 +21,8 @@ export const FINDCOMP_URL={
     },
     USER:{
         REGISTER:'/user/register',
-        UPDATE:'/user/update'
+        UPDATE:'/user/update',
+        SHOW:'/user/show/'
     }
 }
 

@@ -24,9 +24,6 @@ const plainLinkStyle: CSS.Properties = {
 
 export const Home: React.FC<Props> = ({ history,location,match }) => {
 	const classes = useStyles();
-	// console.log(location);
-	// // location.search bisa kaya buat ambil pathvariable
-	// console.log(match);
 		return (
 			<div>
 					<Dashboard 

@@ -144,14 +144,13 @@ export class ItemPage extends React.Component<Props,any> {
   }
 
   setErrorSnackbar = (err) => {
-    console.log("delete item err:"+err);
-      this.setState({
-        snackbar:{
-          isShown:true,
-          severity:"error",
-          msg:err.message.split()
-        }
-      })
+		this.setState({
+			snackbar:{
+				isShown:true,
+				severity:"error",
+				msg:err.message.split()
+			}
+		})
   }
 
   search = (e) => {

@@ -13,3 +13,7 @@ export const convIRegisterRequestToILoginRequest = (data : IRegisterRequest) => 
         password:data.password
     }
 }
+
+export interface IUpdateUserRequest extends IRegisterRequest{
+    newPassword:string
+}
