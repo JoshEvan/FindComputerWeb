@@ -2,7 +2,7 @@ import React from 'react'
 import { RouteComponentProps } from 'react-router-dom';
 import { Dashboard } from '../components/template/Dashboard';
 import { AlertDialog, CustomizedSnackbars, OutlinedCard } from '../components/organism';
-import { IItem, IIndexItemRequest, HTTPCallStatus} from '../data/interfaces';
+import { IItem, IIndexItemRequest, HTTPCallStatus, ICategory, IUpsertItemResponse} from '../data/interfaces';
 import { serviceIndexItem } from '../data/services';
 import "regenerator-runtime/runtime.js";
 import { Box, TextField} from '@material-ui/core';
@@ -10,6 +10,7 @@ import { serviceAddItem, serviceEditItem } from '../data/services/ItemService';
 import { ItemForm } from '../components/organism/form';
 import ItemDetailPage from './ItemDetailPage';
 import { FormGroup, Label, Input } from 'reactstrap';
+import { serviceIndexCategory } from '../data/services/CategoryService';
 
 interface Props extends RouteComponentProps{};
 
@@ -18,6 +19,7 @@ interface IItemPage{
   viewConstraint:IIndexItemRequest,
 	searchKey:string,
 	category:string,
+	categories:ICategory[]
 	snackbar:{
 		isShown:boolean,
 		severity:string,
@@ -35,7 +37,7 @@ const getInitViewConstraint = () => ({
 
 
 export class ItemPage extends React.Component<Props,any> {
-	
+	_isMounted:boolean = true
 	state:IItemPage;
 	constructor(props:Props){
 		super(props);
@@ -44,6 +46,7 @@ export class ItemPage extends React.Component<Props,any> {
       viewConstraint:getInitViewConstraint(),
 			searchKey:"",
 			category:"",
+			categories:[],
 			snackbar:{
 				isShown:false,
 				severity:"info",
@@ -94,6 +97,23 @@ export class ItemPage extends React.Component<Props,any> {
 		this.setState({
 			editDialog:{isShown:false}
 		})
+	}
+	
+	loadAllCategories = async () => {
+		console.log("posting index cate request")
+		await serviceIndexCategory().subscribe(
+			(res) => {
+				console.log("RES:"+Object.keys(res).length);
+				console.log(res.data["categories"]);
+				this.setState({
+					categories: res.data["categories"]
+				});
+			},
+			(err)=>{
+				console.log("axios err:"+err);
+				this.setErrorSnackbar(err)
+			}
+		);
 	}
 
 	loadAllItems = async () => {
@@ -165,8 +185,16 @@ export class ItemPage extends React.Component<Props,any> {
 	}
 
 	async componentDidMount(){
+    this._isMounted = true;			
+    if(this._isMounted){
+      this.loadAllCategories()
+    }
 		this.loadAllItems();
-	}
+  }
+  componentWillUnmount(){
+    this._isMounted=false;
+  }
+  
 
 	render(){
 		let searchKeyword: string = this.state.searchKey
@@ -214,11 +242,13 @@ export class ItemPage extends React.Component<Props,any> {
 							<FormGroup>
 								<Label for="category">Category</Label>
 								<Input type="select" name="select" id="category" onChange={this.searchByCategory}>
-									<option>1</option>
-									<option>2</option>
-									<option>3</option>
-									<option>4</option>
-									<option>5</option>
+									{
+										this.state.categories.map(
+											(c:ICategory) => {
+												return (<option>{c.name}</option>)
+											}
+										)
+									}
 								</Input>
 							</FormGroup>
             </Box>
