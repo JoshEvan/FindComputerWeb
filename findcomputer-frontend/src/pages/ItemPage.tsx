@@ -1,25 +1,23 @@
 import React from 'react'
-import { Link, RouteComponentProps } from 'react-router-dom';
+import { RouteComponentProps } from 'react-router-dom';
 import { Dashboard } from '../components/template/Dashboard';
-import { CustomTable, AlertDialog, CustomizedSnackbars, OutlinedCard } from '../components/organism';
-import { IItem, IIndexItemRequest, IDeleteItemResponse, HTTPCallStatus, IUpsertItemRequest, IUpsertItemResponse} from '../data/interfaces';
-import { serviceIndexItem, getCurrentDate } from '../data/services';
+import { AlertDialog, CustomizedSnackbars, OutlinedCard } from '../components/organism';
+import { IItem, IIndexItemRequest, HTTPCallStatus} from '../data/interfaces';
+import { serviceIndexItem } from '../data/services';
 import "regenerator-runtime/runtime.js";
-import { Button, Paper, Card, CardContent, Typography, Box, TextField } from '@material-ui/core';
-import { async } from 'rxjs/internal/scheduler/async';
-import { serviceDeleteItem, serviceAddItem, serviceEditItem } from '../data/services/ItemService';
+import { Box, TextField} from '@material-ui/core';
+import { serviceAddItem, serviceEditItem } from '../data/services/ItemService';
 import { ItemForm } from '../components/organism/form';
-import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
-import ArrowDropUpIcon from '@material-ui/icons/ArrowDropUp';
-import { SimpleExpansionPanel } from '../components/organism/expansion_panel/SimpleExpansionPanel';
 import ItemDetailPage from './ItemDetailPage';
+import { FormGroup, Label, Input } from 'reactstrap';
 
 interface Props extends RouteComponentProps{};
 
 interface IItemPage{
 	rawContent:IItem[],
   viewConstraint:IIndexItemRequest,
-  searchKey:string,
+	searchKey:string,
+	category:string,
 	snackbar:{
 		isShown:boolean,
 		severity:string,
@@ -44,7 +42,8 @@ export class ItemPage extends React.Component<Props,any> {
 		this.state = {
 			rawContent:[],
       viewConstraint:getInitViewConstraint(),
-      searchKey:"",
+			searchKey:"",
+			category:"",
 			snackbar:{
 				isShown:false,
 				severity:"info",
@@ -64,46 +63,6 @@ export class ItemPage extends React.Component<Props,any> {
 				msg:[]
 			}
 		});
-	}
-
-	addItem = async (data:IUpsertItemRequest) => {
-		await serviceAddItem(data).subscribe(
-			(res:IUpsertItemResponse) => {
-				if(res.data['status'] == HTTPCallStatus.Success){
-					// TODO: set viewConstraint to default ?
-					
-					this.loadAllItems()
-				}
-				this.setState({
-					snackbar:{
-						isShown:true,
-						severity: ((res.data['status'] == HTTPCallStatus.Success) ? "success" : "error"),
-						msg:res.data['message']
-					}
-				})
-			},
-			(err)=>{
-				console.log("add item err:"+err);
-				this.setState({
-					snackbar:{
-						isShown:true,
-						severity:"error",
-						msg:err.message.split()
-					}
-				})
-			}
-		)
-		this.setState({
-			addDialog:{
-				isShown:false,
-				content:(
-					<ItemForm
-						submitData = {this.addItem}
-						item={initItem}
-					/>
-				)
-			}
-		})
 	}
 
 	editItem = async (data:IUpsertItemRequest) => {
@@ -146,7 +105,6 @@ export class ItemPage extends React.Component<Props,any> {
 				this.setState({
 					rawContent: res.data["items"]
 				});
-				console.log(this.state.rawContent[0].itemCode);
 				console.log("STATE:"+Object.keys(this.state.rawContent).length);
 			},
 			(err)=>{
@@ -196,14 +154,30 @@ export class ItemPage extends React.Component<Props,any> {
   search = (e) => {
     this.setState({
       searchKey:e.target.value
-    }, console.log(this.state.searchKey))
-  }
+    },() => console.log(this.state.searchKey))
+	}
+	
+	searchByCategory = (e) => {
+		this.setState({
+      category:e.target.value
+		})
+		console.log(this.state.category)
+	}
 
 	async componentDidMount(){
 		this.loadAllItems();
 	}
 
 	render(){
+		let searchKeyword: string = this.state.searchKey
+		const filteredItems = this.state.rawContent.filter(
+			item => {
+				if(searchKeyword === null) return 1;
+				return (item.name != null && item.name.toLowerCase().indexOf(searchKeyword.toLowerCase()) !== -1
+				|| (item.owner != null && item.owner.toLowerCase().indexOf(searchKeyword.toLowerCase()) !== -1)
+				|| (item.description != null && item.description.toLowerCase().indexOf(searchKeyword.toLowerCase()) !== -1))
+			}
+		)
 		return (
 			<Dashboard 
 			titlePage = {"Items"}			
@@ -237,52 +211,58 @@ export class ItemPage extends React.Component<Props,any> {
             />
             </Box>
             <Box p ={1}>
-
+							<FormGroup>
+								<Label for="category">Category</Label>
+								<Input type="select" name="select" id="category" onChange={this.searchByCategory}>
+									<option>1</option>
+									<option>2</option>
+									<option>3</option>
+									<option>4</option>
+									<option>5</option>
+								</Input>
+							</FormGroup>
             </Box>
           </Box>
           <Box display="flex" flexWrap="wrap">
           {
-							this.state.rawContent.map(
-							(c:IItem, idx:number) => {
-                if((c.description.includes(this.state.searchKey) 
-                || c.name.includes(this.state.searchKey) 
-                || c.owner.includes(this.state.searchKey)))
-                  return(
-                    <React.Fragment>
-                      <Box p={1}>
-                        <OutlinedCard
-                            category={c.category}
-                            owner = {c.owner}
-                            name = {c.name}
-                            price = {c.price}
-                            actions={
-                              <AlertDialog
-                              color="primary"
-                              param={c.id}
-                              parentAllowance = {this.state.editDialog.isShown}
-                              buttonTitle="show more"
-                              parentCallbackOpen={()=>this.setState({editDialog:{isShown:true}})}
-                              dialogTitle="Item Details"
-                              usingAction={false}
-                              dialogContent={
-                                <ItemDetailPage
-                                  id={c.id}
-                                  category={c.category}
-                                  owner = {c.owner}
-                                  name = {c.name}
-                                  price = {c.price}
-                                  description = {c.description}
-                                  parrentCallbackSuccess = {this.setSuccessSnackbar}
-                                  parrentCallbackError = {this.setErrorSnackbar}
-                                />
-                              }
-                            />
-                            }
-                          />
-                        </Box>
-                    </React.Fragment>
-                  );
-                }
+							filteredItems.map(
+							(c:IItem) => {
+									return(
+										<React.Fragment>
+											<Box p={1}>
+												<OutlinedCard
+														category={c.category}
+														owner = {c.owner}
+														name = {c.name}
+														price = {c.price}
+														actions={
+															<AlertDialog
+															color="primary"
+															param={c.id}
+															parentAllowance = {this.state.editDialog.isShown}
+															buttonTitle="show more"
+															parentCallbackOpen={()=>this.setState({editDialog:{isShown:true}})}
+															dialogTitle="Item Details"
+															usingAction={false}
+															dialogContent={
+																<ItemDetailPage
+																	id={c.id}
+																	category={c.category}
+																	owner = {c.owner}
+																	name = {c.name}
+																	price = {c.price}
+																	description = {c.description}
+																	parrentCallbackSuccess = {this.setSuccessSnackbar}
+																	parrentCallbackError = {this.setErrorSnackbar}
+																/>
+															}
+														/>
+														}
+													/>
+												</Box>
+										</React.Fragment>
+									);
+								}
               )
             }
             </Box>
