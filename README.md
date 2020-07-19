@@ -7,9 +7,13 @@ For Live Demo can be seen here https://findcomputer-joshua.herokuapp.com/
 For Video Demo can be seen here https://github.com/JoshEvan/FindComputerWeb/blob/master/findcomputer-demo.mp4?raw=true
 
 made using:
-1. Java Spring Boot
+1. Java Spring Boot, Maven, Spring Dependency Injection
 2. PostgreSQL Database
-3. ReactJS Typescript Frontend
+3. ReactJS Typescript Frontend, webpack, babel
+4. Dependency Injection Design Pattern
+5. Domain-Driven Design
+6. Atomic Design
+
 
 User Requirements :
 * User can register, login, and logout.
