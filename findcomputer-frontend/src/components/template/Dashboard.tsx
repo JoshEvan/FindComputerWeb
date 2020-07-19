@@ -3,35 +3,47 @@ import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Drawer from '@material-ui/core/Drawer';
-import Box from '@material-ui/core/Box';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import List from '@material-ui/core/List';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
-import Badge from '@material-ui/core/Badge';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Link from '@material-ui/core/Link';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import NotificationsIcon from '@material-ui/icons/Notifications';
-import { mainListItems, secondaryListItems } from '../organism';
+import { mainListItems } from '../organism';
 import { ToggleMenu } from '../organism/menu/ToggleMenu'
 
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
       {'Copyright © '}
-      <Link color="inherit" href="https://material-ui.com/">
+      <Link color="inherit" href="https://github.com/JoshEvan/FindComputerWeb">
         Find Computer By JoshEvan
       </Link>{' '}
       {new Date().getFullYear()}
       {'.'}
     </Typography>
   );
+}
+
+function Footer() {
+  return (
+      <AppBar position="static" color="inherit" 
+        style={{position: 'absolute',bottom: '0',width: '100%',height: 'auto', padding:'0'}}>
+        <Container maxWidth="md">
+          <Toolbar>
+            <Typography variant="body1" color="inherit">
+              {Copyright()}
+            </Typography>
+          </Toolbar>
+        </Container>
+      </AppBar>
+  )
 }
 
 const drawerWidth = 240;
@@ -124,12 +136,13 @@ export default function Dashboard({titlePage, content}){
   const handleDrawerClose = () => {
     setOpen(false);
   };
-  const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
   return (
     <div className={classes.root}>
       <CssBaseline />
-      <AppBar position="absolute" className={clsx(classes.appBar, open && classes.appBarShift)}>
+      <AppBar 
+      position="absolute" className={clsx(classes.appBar, open && classes.appBarShift)}
+      style={{background:'linear-gradient(to left, #556270, #4ECDC4)'}}>
         <Toolbar className={classes.toolbar}>
           <IconButton
             edge="start"
@@ -161,8 +174,6 @@ export default function Dashboard({titlePage, content}){
         </div>
         <Divider />
         <List>{mainListItems}</List>
-        <Divider />
-        <List>{secondaryListItems}</List>
       </Drawer>
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
@@ -173,24 +184,12 @@ export default function Dashboard({titlePage, content}){
               <Typography variant="h4" component="h2">
                 {titlePage}
               </Typography>
-              
               {content}
-              
             </Paper>
           </Grid>
-          
         </Container>
-        
-      <footer style={{position:"absolute", bottom: '0', justifyContent:"center",width: "auto"}}>
-        <div>
-        <Container maxWidth="lg" className={classes.container}>
-          <Box pt={4}>
-            <Copyright />
-          </Box>
-        </Container>
-        </div>
-      </footer>
       </main>
+      <Footer/>
     </div>
   );
 }

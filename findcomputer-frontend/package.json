@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "webpack-dev-server --env.dev --open --hot --progress --colors --inline --config webpack.config.js",
+    "start": "set NODE_ENV=production&& node server.js",
     "dev": "webpack && webpack-dev-server --open",
     "be-prod":"webpack-dev-server --mode=production --open --hot --progress --colors --inline --config webpack.config.js",
     "build-development": "webpack -p --progress",

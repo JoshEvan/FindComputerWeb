@@ -18,7 +18,7 @@ interface TabPanelProps {
 }
 
 const coloredBg:CSS.Properties = {
-	background: 'linear-gradient(to right, #03478c, #008033)',
+	background: 'linear-gradient(to left, #556270, #4ECDC4)',
 	width:'100%',
 	height:'100vh',
 	margin:'0'
