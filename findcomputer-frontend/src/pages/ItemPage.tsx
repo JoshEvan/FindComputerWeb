@@ -198,14 +198,18 @@ export class ItemPage extends React.Component<Props,any> {
 
 	render(){
 		let searchKeyword: string = this.state.searchKey
+		let selectedCategory : string = this.state.category
 		const filteredItems = this.state.rawContent.filter(
 			item => {
 				if(searchKeyword === null) return 1;
-				return (item.name != null && item.name.toLowerCase().indexOf(searchKeyword.toLowerCase()) !== -1
+				if(selectedCategory.length > 0 && item.category !== null && item.category !== selectedCategory) return 0;
+				return ((item.name != null && item.name.toLowerCase().indexOf(searchKeyword.toLowerCase()) !== -1
 				|| (item.owner != null && item.owner.toLowerCase().indexOf(searchKeyword.toLowerCase()) !== -1)
 				|| (item.description != null && item.description.toLowerCase().indexOf(searchKeyword.toLowerCase()) !== -1))
+				)
 			}
 		)
+
 		return (
 			<Dashboard 
 			titlePage = {"Items"}			
@@ -242,6 +246,7 @@ export class ItemPage extends React.Component<Props,any> {
 							<FormGroup>
 								<Label for="category">Category</Label>
 								<Input type="select" name="select" id="category" onChange={this.searchByCategory}>
+									<option></option>
 									{
 										this.state.categories.map(
 											(c:ICategory) => {
@@ -301,5 +306,3 @@ export class ItemPage extends React.Component<Props,any> {
       )
 	}
 };
-
-// export default ItemPage;
