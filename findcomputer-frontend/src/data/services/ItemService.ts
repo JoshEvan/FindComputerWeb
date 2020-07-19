@@ -1,7 +1,7 @@
 import { getBaseUrl, FINDCOMP_URL } from "../../configs/api";
 import  Axios from  'axios-observable';
 import { Observable } from "rxjs";
-import { IIndexItemRequest, IIndexItemResponse, IDeleteItemResponse, IUpsertItemRequest } from "../interfaces";
+import { IIndexItemRequest, IIndexItemResponse, IDeleteItemResponse, IUpsertItemRequest, IUpdateItemRequest } from "../interfaces";
 
 const usingBaseUrl = getBaseUrl()
 
@@ -31,7 +31,7 @@ export const serviceAddItem = (dataPayload:IUpsertItemRequest): Observable<any> 
     )
 }
 
-export const serviceEditItem = (dataPayload:IUpsertItemRequest): Observable<any> => {
+export const serviceEditItem = (dataPayload:IUpdateItemRequest): Observable<any> => {
     return Axios.put(
         usingBaseUrl+FINDCOMP_URL.ITEM.EDIT,
         dataPayload 

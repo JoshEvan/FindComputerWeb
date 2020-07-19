@@ -68,37 +68,6 @@ export class ItemPage extends React.Component<Props,any> {
 		});
 	}
 
-	editItem = async (data:IUpsertItemRequest) => {
-		await serviceEditItem(data).subscribe(
-			(res:IUpsertItemResponse) => {
-				if(res.data['status'] == HTTPCallStatus.Success){
-					// TODO: set viewConstraint to default ?
-					this.loadAllItems()
-				}
-				this.setState({
-					snackbar:{
-						isShown:true,
-						severity: ((res.data['status'] == HTTPCallStatus.Success) ? "success" : "error"),
-						msg:res.data['message']
-					}
-				})
-			},
-			(err)=>{
-				console.log("edit item err:"+err);
-				this.setState({
-					snackbar:{
-						isShown:true,
-						severity:"error",
-						msg:err.message.split()
-					}
-				})
-			}
-		)
-		this.setState({
-			editDialog:{isShown:false}
-		})
-	}
-	
 	loadAllCategories = async () => {
 		console.log("posting index cate request")
 		await serviceIndexCategory().subscribe(
@@ -140,7 +109,21 @@ export class ItemPage extends React.Component<Props,any> {
 		);
 	}
 
-  setSuccessSnackbar = (res,key) => {
+	setSuccessSnackbarEdit = (res) => {
+		if(res.data['status'] == HTTPCallStatus.Success){
+			// TODO: set viewConstraint to default ?
+			this.loadAllItems()
+		}
+		this.setState({
+			snackbar:{
+				isShown:true,
+				severity: ((res.data['status'] == HTTPCallStatus.Success) ? "success" : "error"),
+				msg:res.data['message']
+			}
+		})
+	}
+
+  setSuccessSnackbarDelete = (res,key) => {
     console.log("deleting")
       if(res.data['status'] == HTTPCallStatus.Success){
         var array = [...this.state.rawContent]
@@ -286,8 +269,11 @@ export class ItemPage extends React.Component<Props,any> {
 																	owner = {c.owner}
 																	name = {c.name}
 																	price = {c.price}
+																	priceAmount = {c.priceAmount}
 																	description = {c.description}
-																	parrentCallbackSuccess = {this.setSuccessSnackbar}
+																	categories={this.state.categories}
+																	parrentCallbackSuccessDelete = {this.setSuccessSnackbarDelete}
+																	parrentCallbackSuccessEdit = {this.setSuccessSnackbarEdit}
 																	parrentCallbackError = {this.setErrorSnackbar}
 																/>
 															}

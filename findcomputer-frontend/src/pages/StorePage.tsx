@@ -132,37 +132,6 @@ export class StorePage extends React.Component<Props,any> {
 		})
 	}
 
-	editItem = async (data:IUpdateItemRequest) => {
-		await serviceEditItem(data).subscribe(
-			(res:IUpsertItemResponse) => {
-				if(res.data['status'] == HTTPCallStatus.Success){
-					// TODO: set viewConstraint to default ?
-					this.loadAllItems()
-				}
-				this.setState({
-					snackbar:{
-						isShown:true,
-						severity: ((res.data['status'] == HTTPCallStatus.Success) ? "success" : "error"),
-						msg:res.data['message']
-					}
-				})
-			},
-			(err)=>{
-				console.log("edit item err:"+err);
-				this.setState({
-					snackbar:{
-						isShown:true,
-						severity:"error",
-						msg:err.message.split()
-					}
-				})
-			}
-		)
-		this.setState({
-			editDialog:{isShown:false}
-		})
-	}
-
 	loadAllItems = async () => {
 		console.log("posting index request")
 		await serviceIndexItem(this.state.viewConstraint).subscribe(
@@ -239,6 +208,7 @@ export class StorePage extends React.Component<Props,any> {
       searchKey:e.target.value
     }, () => console.log(this.state.searchKey))
   }
+
   searchByCategory = (e) => {
 		this.setState({
       category:e.target.value
@@ -246,6 +216,40 @@ export class StorePage extends React.Component<Props,any> {
 		console.log(this.state.category)
   }
   
+  setSuccessSnackbarEdit = (res) => {
+		if(res.data['status'] == HTTPCallStatus.Success){
+			// TODO: set viewConstraint to default ?
+			this.loadAllItems()
+		}
+		this.setState({
+			snackbar:{
+				isShown:true,
+				severity: ((res.data['status'] == HTTPCallStatus.Success) ? "success" : "error"),
+				msg:res.data['message']
+			}
+		})
+  }
+  
+  setSuccessSnackbarDelete = (res,key) => {
+    console.log("deleting")
+      if(res.data['status'] == HTTPCallStatus.Success){
+        var array = [...this.state.rawContent]
+        var index = array.map((e) => {
+          return e.id
+        }).indexOf(key);
+        array.splice(index,1);
+
+        this.setState({rawContent:array});
+      }
+      this.setState({
+        snackbar:{
+          isShown:true,
+          severity: ((res.data['status'] == HTTPCallStatus.Success) ? "success" : "error"),
+          msg:res.data['message']
+        }
+      })
+  }
+
 	async componentDidMount(){
     this._isMounted = true;			
     if(this._isMounted){
@@ -347,33 +351,36 @@ export class StorePage extends React.Component<Props,any> {
                   return(
                     <React.Fragment>
                       <Box p={1}>
-                        <OutlinedCard
-                            category={c.category}
-                            owner = {c.owner}
-                            name = {c.name}
-                            price = {c.price}
-                            actions={
-                              <AlertDialog
-                              color="primary"
-                              param={c.id}
-                              parentAllowance = {this.state.editDialog.isShown}
-                              buttonTitle="show more"
-                              parentCallbackOpen={()=>this.setState({editDialog:{isShown:true}})}
-                              dialogTitle="Item Details"
-                              usingAction={false}
-                              dialogContent={
-                                <ItemDetailPage
-                                  id={c.id}
-                                  category={c.category}
-                                  owner = {c.owner}
+                      <OutlinedCard
+														category={c.category}
+														owner = {c.owner}
+														name = {c.name}
+														price = {c.price}
+														actions={
+															<AlertDialog
+															color="primary"
+															param={c.id}
+															parentAllowance = {this.state.editDialog.isShown}
+															buttonTitle="show more"
+															parentCallbackOpen={()=>this.setState({editDialog:{isShown:true}})}
+															dialogTitle="Item Details"
+															usingAction={false}
+															dialogContent={
+																<ItemDetailPage
+																	id={c.id}
+																	category={c.category}
+																	owner = {c.owner}
                                   name = {c.name}
                                   price = {c.price}
+																	priceAmount = {c.priceAmount}
                                   description = {c.description}
-                                  parrentCallbackSuccess = {this.setSuccessSnackbar}
-                                  parrentCallbackError = {this.setErrorSnackbar}
-                                />
-                              }
-                            />
+                                  categories = {this.state.categories}
+																	parrentCallbackSuccessDelete = {this.setSuccessSnackbarDelete}
+																	parrentCallbackSuccessEdit = {this.setSuccessSnackbarEdit}
+																	parrentCallbackError = {this.setErrorSnackbar}
+																/>
+															}
+														/>
                             }
                           />
                         </Box>

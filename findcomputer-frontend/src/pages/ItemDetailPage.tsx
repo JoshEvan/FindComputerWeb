@@ -7,9 +7,10 @@ import Divider from '@material-ui/core/Divider';
 import Typography from '@material-ui/core/Typography';
 import FaceIcon from '@material-ui/icons/Face';
 import jwt_decode from 'jwt-decode';
-import { serviceDeleteItem, serviceBuyItem } from '../data/services/ItemService';
-import { IDeleteItemResponse, HTTPCallStatus } from '../data/interfaces';
+import { serviceDeleteItem, serviceBuyItem, serviceEditItem } from '../data/services/ItemService';
+import { IDeleteItemResponse, HTTPCallStatus, IUpdateItemRequest, IUpsertItemResponse } from '../data/interfaces';
 import { AlertDialog } from '../components/organism';
+import { ItemForm } from '../components/organism/form';
 
 const useStyles = theme =>
   ({
@@ -34,9 +35,14 @@ const useStyles = theme =>
 
 
 class ItemDetailPage extends React.Component<any,any> {
-  
+  state
   constructor(props){
     super(props)
+    this.state = {
+      editDialog:{
+        isShown:false
+      }
+    }
   }
   
  deleteItem = async (key:string) =>  {
@@ -67,7 +73,23 @@ class ItemDetailPage extends React.Component<any,any> {
   buyConfirm =  (isYes:boolean, key:string) => {
     if(isYes) this.buyItem(key);
   }
+
   
+	editItem = async (data:IUpdateItemRequest) => {
+    data = data as IUpdateItemRequest
+    data.requester = jwt_decode(localStorage.getItem("JWT")).sub
+		await serviceEditItem(data).subscribe(
+			(res:IUpdateItemResponse) => {
+				this.props.parrentCallbackSuccessEdit(res)
+			},
+			(err)=>{
+			  this.props.parrentCallbackError(err)
+			}
+		)
+		this.setState({
+			editDialog:{isShown:false}
+		})
+	}
 
   render(){
     const { classes } = this.props;
@@ -125,7 +147,33 @@ class ItemDetailPage extends React.Component<any,any> {
           localStorage.getItem("JWT") !== null && jwt_decode(localStorage.getItem("JWT")).sub === this.props.owner
           &&
           <React.Fragment>
-            <Button color="primary">EDIT</Button>
+            <AlertDialog
+              variant="outlined"
+              color="primary"
+              parentAllowance = {this.state.editDialog.isShown}
+              buttonTitle="edit"
+              parentCallbackOpen={()=>this.setState({editDialog:{isShown:true}})}
+              dialogTitle={"Edit Item "+this.props.name}
+              usingAction={false}
+              dialogContent={
+                <ItemForm
+                  submitData = {this.editItem}
+                  item={
+                    {
+                      id:this.props.id,
+                      name:this.props.name,
+                      category:this.props.category,
+                      price:this.props.priceAmount,
+                      description:this.props.description,
+                      owner:this.props.owner,
+                    }
+                  }
+                  categories={
+                    this.props.categories
+                  }
+                />
+              }
+          />
             <AlertDialog
               color="secondary"
               usingAction={true}

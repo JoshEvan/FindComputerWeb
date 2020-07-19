@@ -10,7 +10,8 @@ export interface IInsertItemRequest{
 }
 
 export interface IUpdateItemRequest extends IInsertItemRequest{
-	id:string
+	itemId:string,
+	requester:string
 }
 
 export interface IUpsertItemResponse{

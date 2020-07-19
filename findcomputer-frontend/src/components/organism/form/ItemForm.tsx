@@ -7,15 +7,15 @@ import { ICategory } from '../../../data/interfaces';
 
 const validationSchema = yup.object({
 	name: yup.string().required("Item Name must be filled"),
-	price: yup.number().required("Item Price must be filled"),
+	priceAmount: yup.number().required("Item Price must be filled"),
 	category: yup.string().required("Item Category must be filled")
 })
 
-const TextFieldWValidation:React.FC<FieldAttributes<{}>> = ({placeholder,type,...props}) => {
-	const [field, meta] = useField<{}>(props); // hook dari formik
+const TextFieldWValidation:any = ({placeholder,type,...props}) => {
+	const [field, meta] = useField<{}>(props); 
 	const errorText = meta.error && meta.touched ? meta.error : "";
 	return(
-		<TextField label={placeholder} type={type}
+		<TextField label={placeholder} type={type} InputLabelProps={props.InputLabelProps}
 			{...field} helperText={errorText} error={!!errorText} variant="outlined" />
 	)
 }
@@ -45,11 +45,12 @@ export class ItemForm extends React.Component<any,any>{
 			<div>
 				<Formik
 					initialValues={{
-						id:this.props.item.id,
+						itemId:this.props.item.id,
 						description:this.props.item.description,
 						name:this.props.item.name,
-						price:this.props.item.price,
+						priceAmount:this.props.item.price,
 						category:this.props.item.category,
+						owner:this.props.item.owner,
 						errors:'',
 						values:''
 					}}
@@ -82,8 +83,8 @@ export class ItemForm extends React.Component<any,any>{
 						<div style={{padding:'2%'}}>
 							<TextFieldWValidation
 								placeholder="item price"
-								name="price" 
-								type="number" 
+								name="priceAmount" 
+								type="number"
 								as={TextField}/>
 						</div>
 
