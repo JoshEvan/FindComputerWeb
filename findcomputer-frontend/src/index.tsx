@@ -9,11 +9,16 @@ import createPalette from '@material-ui/core/styles/createPalette';
 import { AuthPage } from './pages/AuthPage';
 import { StorePage } from './pages/StorePage';
 import { ProfilePage } from './pages/ProfilePage';
+import { red } from '@material-ui/core/colors';
 
 export default function App(): JSX.Element {
     const THEME = (() => {
         const palette = createPalette({
-          type: 'light',
+          type: 'dark',
+          primary: {
+            main: '#039be5',
+          },
+          secondary: red,
         });
       
         const typography = createTypography(palette, {
