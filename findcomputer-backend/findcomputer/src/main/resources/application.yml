@@ -1,12 +1,13 @@
 app:
     datasource:
-      jdbc-url: jdbc:postgresql://ec2-54-75-229-28.eu-west-1.compute.amazonaws.com:5432/dfnmcig94bc3ks?currentSchema=findcomp_user,public
-      username: bvvmwhjtdzvpjf
-      password: 365591e7324dea8c132b658d48519c1e1dcf8b1b1caca8a7e32d6e44c4d900d8
+      jdbc-url: jdbc:postgresql://${DBHOST:amazonaws.com}:${PORT:5432}/${DBNAME:dfnmcig94bc3ks}?currentSchema=findcomp_user,public
+      username: ${DB_USER:bvvmwhjtdzvpjf}
+      password: ${DB_PASS:365591}
       pool-size: 30
 
 application:
   jwt:
-    secretKey: 123456789012345678901234567890123456789012345678901234567890asdadadadqwqeqwe!##
+    secretKey: ${JWT_SECRET:123}
     tokenPrefix: Bearer
     tokenExpirationAfterDays: 3
+	
