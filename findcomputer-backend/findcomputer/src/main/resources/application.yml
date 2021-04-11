@@ -1,8 +1,8 @@
 app:
     datasource:
-      jdbc-url: jdbc:postgresql://ec2-54-75-246-118.eu-west-1.compute.amazonaws.com:5432/d9360pv9pug1mn?currentSchema=findcomp_user,public
-      username: vbvieqseydsato
-      password: 8213e376c75b19577bf7636afcf57d14635f5d3320f3d92904191edb41dc851a
+      jdbc-url: jdbc:postgresql://ec2-54-75-229-28.eu-west-1.compute.amazonaws.com:5432/dfnmcig94bc3ks?currentSchema=findcomp_user,public
+      username: bvvmwhjtdzvpjf
+      password: 365591e7324dea8c132b658d48519c1e1dcf8b1b1caca8a7e32d6e44c4d900d8
       pool-size: 30
 
 application:
